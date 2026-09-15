@@ -4,6 +4,17 @@ import Avatar from "../common/Avatar";
 function DashboardSidebar() {
   const navigate = useNavigate();
 
+  const currentUser = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
+
+  const userName = currentUser?.name || "User";
+
+  function handleLogout() {
+    localStorage.removeItem("currentUser");
+    navigate("/login");
+  }
+
   return (
     <div
       style={{
@@ -31,7 +42,7 @@ function DashboardSidebar() {
             fontSize: "34px",
           }}
         >
-          Abcdefg
+          {userName}
         </h2>
       </div>
 
@@ -43,10 +54,10 @@ function DashboardSidebar() {
         }}
       >
         <MenuItem
-  text="Active Fleets"
-  active={true}
-  onClick={() => navigate("/fleet")}
-/>
+          text="Active Fleets"
+          active={true}
+          onClick={() => navigate("/fleet")}
+        />
 
         <MenuItem
           text="Drivers List"
@@ -60,7 +71,7 @@ function DashboardSidebar() {
 
         <MenuItem
           text="Logout"
-          onClick={() => navigate("/")}
+          onClick={handleLogout}
         />
       </div>
     </div>

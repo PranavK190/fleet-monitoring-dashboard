@@ -6,10 +6,21 @@ function PageHeader({
   showHomeButton = false,
   showAlertButton = false,
   backRoute = -1,
+  backState = undefined,
   homeRoute = "/dashboard",
   alertRoute = "/alert-list",
 }) {
   const navigate = useNavigate();
+
+  function handleBack() {
+    if (backState !== undefined) {
+      navigate(backRoute, {
+        state: backState,
+      });
+    } else {
+      navigate(backRoute);
+    }
+  }
 
   return (
     <div
@@ -33,7 +44,7 @@ function PageHeader({
       >
         {showBackButton && (
           <button
-            onClick={() => navigate(backRoute)}
+            onClick={handleBack}
             style={{
               background: "none",
               border: "none",

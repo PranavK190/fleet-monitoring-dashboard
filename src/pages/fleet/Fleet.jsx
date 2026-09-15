@@ -7,6 +7,7 @@ import PageHeader from "../../components/layout/PageHeader";
 import SearchBar from "../../components/common/SearchBar";
 import DataTable from "../../components/common/DataTable";
 import StatusBadge from "../../components/common/StatusBadge";
+import PrimaryButton from "../../components/common/PrimaryButton";
 
 function displayValue(value) {
   return value !== null && value !== undefined && value !== ""
@@ -25,11 +26,18 @@ function Fleet() {
         const data = await getFleets();
 
         const formattedFleets = data.map((fleet) => ({
-  fleetNo: displayValue(fleet.fleet_name),
-  fleetId: displayValue(fleet.id),
-  status: displayValue(fleet.status),
-  driver: displayValue(fleet.driver?.name),
-
+          id: fleet.id,
+          fleetNo: displayValue(fleet.fleet_name),
+          fleetId: displayValue(fleet.id),
+          status: displayValue(fleet.status),
+          driver: displayValue(fleet.driver?.name),
+          location:
+            fleet.latitude !== null &&
+            fleet.latitude !== undefined &&
+            fleet.longitude !== null &&
+            fleet.longitude !== undefined
+              ? `${fleet.latitude}, ${fleet.longitude}`
+              : "N/A",
           latitude: fleet.latitude,
           longitude: fleet.longitude,
           vehicleNumber: fleet.vehicle_number,
@@ -38,7 +46,10 @@ function Fleet() {
 
         setFleets(formattedFleets);
       } catch (error) {
-        console.error("Failed to load fleets:", error);
+        console.error(
+          "Failed to load fleets:",
+          error
+        );
       }
     }
 
@@ -63,6 +74,7 @@ function Fleet() {
       <PageHeader
         title="Active Fleets"
         showBackButton={true}
+        backRoute="/dashboard"
         showAlertButton={true}
       />
 
@@ -71,7 +83,23 @@ function Fleet() {
           padding: "35px 50px",
         }}
       >
-        <SearchBar placeholder="Search Fleet..." />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
+          <SearchBar placeholder="Search Fleet..." />
+
+          <PrimaryButton
+            text="ADD FLEET"
+            onClick={() =>
+              navigate("/fleet-add")
+            }
+          />
+        </div>
 
         <div
           style={{
@@ -83,7 +111,9 @@ function Fleet() {
             data={fleets}
             renderCell={(key, value, row) => {
               if (key === "status") {
-                return <StatusBadge status={value} />;
+                return (
+                  <StatusBadge status={value} />
+                );
               }
 
               if (key === "location") {

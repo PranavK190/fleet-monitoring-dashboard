@@ -5,6 +5,7 @@ import { getDrivers } from "../../services/driver-service";
 
 import PageHeader from "../../components/layout/PageHeader";
 import DataTable from "../../components/common/DataTable";
+import PrimaryButton from "../../components/common/PrimaryButton";
 
 function displayValue(value) {
   return value !== null && value !== undefined && value !== ""
@@ -38,28 +39,103 @@ function DriverList() {
 
   const [drivers, setDrivers] = useState([]);
 
+  const [searchType, setSearchType] = useState("name");
+  const [searchText, setSearchText] = useState("");
+  const [filter, setFilter] = useState("all");
+
   useEffect(() => {
     async function loadDrivers() {
       try {
         const data = await getDrivers();
 
         const formattedDrivers = data.map((driver) => ({
-  id: driver.id,
-  name: driver.name,
-  driverId: displayValue(driver.employee_id),
-  fleetNo: displayValue(driver.fleet_id),
-  lastActive: formatDateTime(driver.created_at),
-  profile: "View Profile",
-}));
+          id: driver.id,
+          name: displayValue(driver.name),
+          driverId: displayValue(driver.employee_id),
+
+          fleetNo:
+            driver.fleet_id !== null &&
+            driver.fleet_id !== undefined &&
+            driver.fleet_id !== ""
+              ? driver.fleet_id
+              : "Not Assigned",
+
+          fleetId: driver.fleet_id,
+
+          lastActive: formatDateTime(
+            driver.created_at
+          ),
+
+          profile: "View Profile",
+        }));
 
         setDrivers(formattedDrivers);
       } catch (error) {
-        console.error("Failed to load drivers:", error);
+        console.error(
+          "Failed to load drivers:",
+          error
+        );
       }
     }
 
     loadDrivers();
   }, []);
+
+  const filteredDrivers = drivers.filter(
+    (driver) => {
+      /*
+       * Search filter
+       */
+      const searchValue =
+        searchType === "name"
+          ? driver.name
+          : driver.driverId;
+
+      const matchesSearch =
+        searchValue
+          .toString()
+          .toLowerCase()
+          .includes(
+            searchText
+              .trim()
+              .toLowerCase()
+          );
+
+      if (!matchesSearch) {
+        return false;
+      }
+
+      /*
+       * Active / Inactive filter
+       *
+       * A driver is considered ACTIVE when
+       * fleet_id is populated.
+       *
+       * A driver is considered INACTIVE when
+       * fleet_id is null or empty.
+       */
+      const hasFleet =
+        driver.fleetId !== null &&
+        driver.fleetId !== undefined &&
+        driver.fleetId !== "";
+
+      if (
+        filter === "active" &&
+        !hasFleet
+      ) {
+        return false;
+      }
+
+      if (
+        filter === "inactive" &&
+        hasFleet
+      ) {
+        return false;
+      }
+
+      return true;
+    }
+  );
 
   const columns = [
     { key: "name", label: "Name" },
@@ -82,6 +158,151 @@ function DriverList() {
         showAlertButton={true}
       />
 
+      {/* Controls */}
+      <div
+        style={{
+          padding: "25px 50px 0",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "25px",
+        }}
+      >
+        {/* Search */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            flex: 1,
+            maxWidth: "700px",
+          }}
+        >
+          <select
+            value={searchType}
+            onChange={(event) =>
+              setSearchType(
+                event.target.value
+              )
+            }
+            style={{
+              height: "50px",
+              padding: "0 15px",
+              backgroundColor: "#76AFF1",
+              border: "none",
+              borderRadius: "5px",
+              outline: "none",
+              fontSize: "18px",
+              color: "#111111",
+              cursor: "pointer",
+            }}
+          >
+            <option value="name">
+              Name
+            </option>
+
+            <option value="driverId">
+              Employee ID
+            </option>
+          </select>
+
+          <input
+            type="text"
+            value={searchText}
+            onChange={(event) =>
+              setSearchText(
+                event.target.value
+              )
+            }
+            placeholder={
+              searchType === "name"
+                ? "Search by name..."
+                : "Search by employee ID..."
+            }
+            style={{
+              flex: 1,
+              height: "50px",
+              padding: "0 18px",
+              backgroundColor: "#76AFF1",
+              border: "none",
+              borderRadius: "5px",
+              outline: "none",
+              fontSize: "18px",
+              color: "#111111",
+            }}
+          />
+        </div>
+
+        {/* Filter + Add Driver */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <span
+              style={{
+                color: "white",
+                fontSize: "18px",
+                fontWeight: "500",
+              }}
+            >
+              Filter:
+            </span>
+
+            <select
+              value={filter}
+              onChange={(event) =>
+                setFilter(
+                  event.target.value
+                )
+              }
+              style={{
+                height: "50px",
+                padding: "0 15px",
+                backgroundColor: "#76AFF1",
+                border: "none",
+                borderRadius: "5px",
+                outline: "none",
+                fontSize: "18px",
+                color: "#111111",
+                cursor: "pointer",
+              }}
+            >
+              <option value="all">
+                All Drivers
+              </option>
+
+              <option value="active">
+                Active Drivers
+              </option>
+
+              <option value="inactive">
+                Inactive Drivers
+              </option>
+            </select>
+          </div>
+
+          <PrimaryButton
+            text="ADD DRIVER"
+            width="180px"
+            height="50px"
+            onClick={() =>
+              navigate("/driver-add")
+            }
+          />
+        </div>
+      </div>
+
+      {/* Driver Table */}
       <div
         style={{
           padding: "35px 50px",
@@ -89,20 +310,24 @@ function DriverList() {
       >
         <DataTable
           columns={columns}
-          data={drivers}
+          data={filteredDrivers}
           renderCell={(key, value, row) => {
             if (key === "profile") {
               return (
                 <span
                   onClick={() =>
-                    navigate("/driver-profile", {
-                      state: row,
-                    })
+                    navigate(
+                      "/driver-profile",
+                      {
+                        state: row,
+                      }
+                    )
                   }
                   style={{
                     cursor: "pointer",
                     color: "white",
-                    textDecoration: "underline",
+                    textDecoration:
+                      "underline",
                     fontWeight: "500",
                   }}
                 >

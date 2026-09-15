@@ -7,6 +7,7 @@ import MetricCard from "../common/MetricCard";
 function DashboardMetrics() {
   const [metrics, setMetrics] = useState({
     totalFleet: 0,
+    totalDrivers: 0,
     alerts: 0,
     activeDrivers: 0,
   });
@@ -15,9 +16,15 @@ function DashboardMetrics() {
     async function loadMetrics() {
       try {
         const data = await getDashboardMetrics();
+
+        console.log("Dashboard metrics:", data);
+
         setMetrics(data);
       } catch (error) {
-        console.error("Failed to load dashboard metrics:", error);
+        console.error(
+          "Failed to load dashboard metrics:",
+          error
+        );
       }
     }
 
@@ -27,9 +34,10 @@ function DashboardMetrics() {
   return (
     <div
       style={{
+        width: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: "70px",
+        gap: "60px",
         alignItems: "center",
       }}
     >
@@ -40,6 +48,7 @@ function DashboardMetrics() {
           display: "flex",
           justifyContent: "space-evenly",
           alignItems: "center",
+          gap: "30px",
         }}
       >
         <MetricCard
@@ -48,17 +57,32 @@ function DashboardMetrics() {
         />
 
         <MetricCard
+          title="Total Drivers"
+          value={`${metrics.totalDrivers} Drivers`}
+        />
+      </div>
+
+      {/* Bottom Row */}
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+          gap: "30px",
+        }}
+      >
+        <MetricCard
+          title="Active Drivers"
+          value={`${metrics.activeDrivers} Drivers`}
+        />
+
+        <MetricCard
           title="Alerts"
           value={metrics.alerts}
           valueColor="red"
         />
       </div>
-
-      {/* Bottom Card */}
-      <MetricCard
-        title="Active Drivers"
-        value={`${metrics.activeDrivers} Drivers`}
-      />
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import { supabase } from "../lib/supabase";
 
-export async function getUserProfile() {
+export async function getUserProfile(userId) {
   const { data, error } = await supabase
     .from("users")
     .select("id, name, email, phone, role, profile_photo")
-    .limit(1)
+    .eq("id", userId)
     .single();
 
   if (error) {

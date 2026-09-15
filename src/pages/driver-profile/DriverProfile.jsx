@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { getDriverProfile } from "../../services/driver-service";
+import {
+  getDriverProfile,
+  deleteDriver,
+} from "../../services/driver-service";
 
 import PageHeader from "../../components/layout/PageHeader";
 import PrimaryButton from "../../components/common/PrimaryButton";
 
 function displayValue(value) {
-  return value !== null && value !== undefined && value !== ""
+  return value !== null &&
+    value !== undefined &&
+    value !== ""
     ? value
     : "N/A";
 }
@@ -23,18 +28,25 @@ function formatDateTime(value) {
     return "N/A";
   }
 
-  return date.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+  return date.toLocaleString(
+    "en-IN",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }
+  );
 }
 
 function formatFatigueScore(value) {
-  if (value === null || value === undefined || value === "") {
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
     return "N/A";
   }
 
@@ -47,6 +59,8 @@ function DriverProfile() {
 
   const [driver, setDriver] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] =
+    useState(false);
 
   useEffect(() => {
     async function loadDriverProfile() {
@@ -56,20 +70,37 @@ function DriverProfile() {
       }
 
       try {
-        const data = await getDriverProfile(state.id);
+        setLoading(true);
+
+        const data =
+          await getDriverProfile(
+            state.id
+          );
 
         setDriver({
           id: data.driver.id,
           name: data.driver.name,
-          driverId: data.driver.employee_id,
+          driverId:
+            data.driver.employee_id,
           age: data.driver.age,
-          contact: data.driver.contact,
-          fleetNo: data.fleet?.fleet_name,
-          lastActive: data.latestMetric?.created_at,
-          fatigueScore: data.latestMetric?.fatigue_score,
+          contact:
+            data.driver.contact,
+          fleetNo:
+            data.fleet?.fleet_name,
+          lastActive:
+            data.latestMetric
+              ?.created_at,
+          fatigueScore:
+            data.latestMetric
+              ?.fatigue_score,
         });
       } catch (error) {
-        console.error("Failed to load driver profile:", error);
+        console.error(
+          "Failed to load driver profile:",
+          error
+        );
+
+        setDriver(null);
       } finally {
         setLoading(false);
       }
@@ -77,6 +108,90 @@ function DriverProfile() {
 
     loadDriverProfile();
   }, [state]);
+
+  async function handleDeleteDriver() {
+    if (!driver?.id) {
+      return;
+    }
+
+    const confirmed =
+      window.confirm(
+        `Are you sure you want to delete ${driver.name}? This action cannot be undone.`
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setDeleting(true);
+
+      await deleteDriver(
+        driver.id
+      );
+
+      /*
+       * A deleted driver must always go
+       * directly back to Driver List.
+       *
+       * replace prevents the deleted profile
+       * from remaining in browser history
+       * as the immediate destination.
+       */
+      navigate(
+        "/driver-list",
+        {
+          replace: true,
+        }
+      );
+    } catch (error) {
+      console.error(
+        "Failed to delete driver:",
+        error
+      );
+
+      alert(
+        error.message ||
+          "Failed to delete driver. Please try again."
+      );
+
+      setDeleting(false);
+    }
+  }
+
+  function handleUpdateDriver() {
+    if (!driver?.id) {
+      return;
+    }
+
+    navigate(
+      "/driver-update",
+      {
+        state: {
+          id: driver.id,
+          name: driver.name,
+          age: driver.age,
+          contact: driver.contact,
+          driverId: driver.driverId,
+        },
+      }
+    );
+  }
+
+  function handleViewHistory() {
+    if (!driver?.id) {
+      return;
+    }
+
+    navigate(
+      "/driver-history",
+      {
+        state: {
+          id: driver.id,
+        },
+      }
+    );
+  }
 
   if (loading) {
     return (
@@ -103,13 +218,43 @@ function DriverProfile() {
           minHeight: "100vh",
           backgroundColor: "#14004D",
           color: "white",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "24px",
         }}
       >
-        Driver information not available.
+        <PageHeader
+          title="Drivers Profile"
+          showBackButton={true}
+          backRoute="/driver-list"
+          showAlertButton={true}
+          alertRoute="/alert"
+        />
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: "100px",
+            fontSize: "24px",
+            gap: "30px",
+          }}
+        >
+          <p>
+            Driver information is not available.
+          </p>
+
+          <PrimaryButton
+            text="BACK TO DRIVERS"
+            onClick={() =>
+              navigate(
+                "/driver-list",
+                {
+                  replace: true,
+                }
+              )
+            }
+          />
+        </div>
       </div>
     );
   }
@@ -124,6 +269,7 @@ function DriverProfile() {
       <PageHeader
         title="Drivers Profile"
         showBackButton={true}
+        backRoute="/driver-list"
         showAlertButton={true}
         alertRoute="/alert"
       />
@@ -131,7 +277,8 @@ function DriverProfile() {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent:
+            "space-between",
           padding: "50px",
           gap: "60px",
         }}
@@ -141,7 +288,8 @@ function DriverProfile() {
           style={{
             width: "35%",
             display: "flex",
-            flexDirection: "column",
+            flexDirection:
+              "column",
             alignItems: "center",
             gap: "40px",
           }}
@@ -154,8 +302,10 @@ function DriverProfile() {
               borderRadius: "50%",
               border: "12px solid white",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems:
+                "center",
+              justifyContent:
+                "center",
               color: "white",
               fontSize: "90px",
             }}
@@ -167,16 +317,19 @@ function DriverProfile() {
           <div
             style={{
               width: "220px",
-              backgroundColor: "#8DB7F0",
+              backgroundColor:
+                "#8DB7F0",
               borderRadius: "6px",
               overflow: "hidden",
             }}
           >
             <div
               style={{
-                borderBottom: "1px solid #555",
+                borderBottom:
+                  "1px solid #555",
                 padding: "10px",
-                textAlign: "center",
+                textAlign:
+                  "center",
                 fontWeight: "600",
               }}
             >
@@ -186,12 +339,15 @@ function DriverProfile() {
             <div
               style={{
                 padding: "30px",
-                textAlign: "center",
+                textAlign:
+                  "center",
                 fontSize: "28px",
                 fontWeight: "700",
               }}
             >
-              {formatFatigueScore(driver.fatigueScore)}
+              {formatFatigueScore(
+                driver.fatigueScore
+              )}
             </div>
           </div>
 
@@ -199,16 +355,19 @@ function DriverProfile() {
           <div
             style={{
               width: "220px",
-              backgroundColor: "#8DB7F0",
+              backgroundColor:
+                "#8DB7F0",
               borderRadius: "6px",
               overflow: "hidden",
             }}
           >
             <div
               style={{
-                borderBottom: "1px solid #555",
+                borderBottom:
+                  "1px solid #555",
                 padding: "10px",
-                textAlign: "center",
+                textAlign:
+                  "center",
                 fontWeight: "600",
               }}
             >
@@ -218,11 +377,14 @@ function DriverProfile() {
             <div
               style={{
                 padding: "30px",
-                textAlign: "center",
+                textAlign:
+                  "center",
                 fontWeight: "600",
               }}
             >
-              {formatDateTime(driver.lastActive)}
+              {formatDateTime(
+                driver.lastActive
+              )}
             </div>
           </div>
         </div>
@@ -232,52 +394,75 @@ function DriverProfile() {
           style={{
             flex: 1,
             display: "flex",
-            flexDirection: "column",
+            flexDirection:
+              "column",
             gap: "20px",
           }}
         >
           {[
             {
               label: "Name",
-              value: displayValue(driver.name),
+              value:
+                displayValue(
+                  driver.name
+                ),
             },
             {
               label: "Employee ID",
-              value: displayValue(driver.driverId),
+              value:
+                displayValue(
+                  driver.driverId
+                ),
             },
             {
               label: "Age",
-              value: displayValue(driver.age),
+              value:
+                displayValue(
+                  driver.age
+                ),
             },
             {
               label: "Contact",
-              value: displayValue(driver.contact),
+              value:
+                displayValue(
+                  driver.contact
+                ),
             },
             {
               label: "Fleet Assigned",
-              value: displayValue(driver.fleetNo),
+              value:
+                displayValue(
+                  driver.fleetNo
+                ),
             },
           ].map((item) => (
             <div
               key={item.label}
               style={{
-                backgroundColor: "#8DB7F0",
-                padding: "18px 24px",
+                backgroundColor:
+                  "#8DB7F0",
+                padding:
+                  "18px 24px",
                 borderRadius: "18px",
                 fontSize: "22px",
                 fontWeight: "500",
               }}
             >
-              <strong>{item.label} - </strong>
+              <strong>
+                {item.label} -{" "}
+              </strong>
+
               {item.value}
             </div>
           ))}
 
-          {/* Buttons */}
+          {/* Action Buttons */}
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent:
+                "space-between",
+              gap: "20px",
               marginTop: "60px",
             }}
           >
@@ -285,10 +470,8 @@ function DriverProfile() {
               text="VIEW HISTORY"
               width="240px"
               height="60px"
-              onClick={() =>
-                navigate("/driver-history", {
-                  state: driver,
-                })
+              onClick={
+                handleViewHistory
               }
             />
 
@@ -296,7 +479,43 @@ function DriverProfile() {
               text="CONTACT DRIVER"
               width="240px"
               height="60px"
-              onClick={() => alert("Contact Driver")}
+              onClick={() =>
+                alert(
+                  "Contact Driver"
+                )
+              }
+            />
+
+            <PrimaryButton
+              text="UPDATE DRIVER"
+              width="240px"
+              height="60px"
+              onClick={
+                handleUpdateDriver
+              }
+            />
+          </div>
+
+          {/* Delete Button */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent:
+                "center",
+              marginTop: "15px",
+            }}
+          >
+            <PrimaryButton
+              text={
+                deleting
+                  ? "DELETING..."
+                  : "DELETE DRIVER"
+              }
+              width="240px"
+              height="60px"
+              onClick={
+                handleDeleteDriver
+              }
             />
           </div>
         </div>

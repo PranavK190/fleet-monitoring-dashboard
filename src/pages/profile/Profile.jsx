@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { getUserProfile } from "../../services/user-service";
 
@@ -13,6 +14,8 @@ function displayValue(value) {
 }
 
 function Profile() {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
 
   const [name, setName] = useState("");
@@ -24,7 +27,15 @@ function Profile() {
   useEffect(() => {
     async function loadUserProfile() {
       try {
-        const data = await getUserProfile();
+        const currentUser = JSON.parse(
+          localStorage.getItem("currentUser")
+        );
+
+        if (!currentUser?.id) {
+          throw new Error("No logged-in user found.");
+        }
+
+        const data = await getUserProfile(currentUser.id);
 
         setUser(data);
         setName(data.name || "");
@@ -160,12 +171,10 @@ function Profile() {
             }}
           >
             <PrimaryButton
-              text="SAVE CHANGES"
+              text="UPDATE PROFILE"
               width="220px"
               height="60px"
-              onClick={() =>
-                alert("Update Profile functionality pending")
-              }
+              onClick={() => navigate("/update-profile")}
             />
 
             <PrimaryButton
@@ -173,8 +182,9 @@ function Profile() {
               width="180px"
               height="60px"
               onClick={() => {
-                window.location.href = "/login";
-              }}
+  localStorage.removeItem("currentUser");
+  window.location.href = "/login";
+}}
             />
           </div>
         </div>

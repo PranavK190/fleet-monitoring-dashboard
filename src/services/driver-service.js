@@ -115,3 +115,61 @@ export async function getDriverHistory(driverId) {
     unresponsiveEvents: unresponsiveEvents.length,
   };
 }
+
+export async function createDriver(driverData) {
+  const { data, error } = await supabase
+    .from("drivers")
+    .insert({
+      name: driverData.name,
+      age: driverData.age,
+      contact: driverData.contact,
+      employee_id: driverData.employee_id,
+      fleet_id: null,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error("Error creating driver:", error.message);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updateDriver(driverId, driverData) {
+  const { data, error } = await supabase
+    .from("drivers")
+    .update({
+      name: driverData.name,
+      age: driverData.age,
+      contact: driverData.contact,
+      employee_id: driverData.employee_id,
+    })
+    .eq("id", driverId)
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error("Error updating driver:", error.message);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function deleteDriver(driverId) {
+  const { data, error } = await supabase
+    .from("drivers")
+    .delete()
+    .eq("id", driverId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error deleting driver:", error.message);
+    throw error;
+  }
+
+  return data;
+}
