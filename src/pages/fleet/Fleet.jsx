@@ -10,7 +10,9 @@ import StatusBadge from "../../components/common/StatusBadge";
 import PrimaryButton from "../../components/common/PrimaryButton";
 
 function displayValue(value) {
-  return value !== null && value !== undefined && value !== ""
+  return value !== null &&
+    value !== undefined &&
+    value !== ""
     ? value
     : "N/A";
 }
@@ -23,28 +25,70 @@ function Fleet() {
   useEffect(() => {
     async function loadFleets() {
       try {
-        const data = await getFleets();
+        const data =
+          await getFleets();
 
-        const formattedFleets = data.map((fleet) => ({
-          id: fleet.id,
-          fleetNo: displayValue(fleet.fleet_name),
-          fleetId: displayValue(fleet.id),
-          status: displayValue(fleet.status),
-          driver: displayValue(fleet.driver?.name),
-          location:
-            fleet.latitude !== null &&
-            fleet.latitude !== undefined &&
-            fleet.longitude !== null &&
-            fleet.longitude !== undefined
-              ? `${fleet.latitude}, ${fleet.longitude}`
-              : "N/A",
-          latitude: fleet.latitude,
-          longitude: fleet.longitude,
-          vehicleNumber: fleet.vehicle_number,
-          driverId: fleet.driver_id,
-        }));
+        const formattedFleets =
+          data.map(
+            (fleet) => ({
+              // Internal UUID.
+              // Keep this for navigation/database operations.
+              id: fleet.id,
 
-        setFleets(formattedFleets);
+              fleetNo:
+                displayValue(
+                  fleet.fleet_name
+                ),
+
+              // Human-readable Fleet ID.
+              fleetId:
+                displayValue(
+                  fleet.fleet_code
+                ),
+
+              status:
+                displayValue(
+                  fleet.status
+                ),
+
+              driver:
+                displayValue(
+                  fleet.driver?.name
+                ),
+
+              location:
+                fleet.latitude !== null &&
+                fleet.latitude !==
+                  undefined &&
+                fleet.longitude !== null &&
+                fleet.longitude !==
+                  undefined
+                  ? `${fleet.latitude}, ${fleet.longitude}`
+                  : "N/A",
+
+              latitude:
+                fleet.latitude,
+
+              longitude:
+                fleet.longitude,
+
+              vehicleNumber:
+                fleet.vehicle_number,
+
+              driverId:
+                fleet.driver_id,
+
+              start:
+                fleet.start,
+
+              destination:
+                fleet.destination,
+            })
+          );
+
+        setFleets(
+          formattedFleets
+        );
       } catch (error) {
         console.error(
           "Failed to load fleets:",
@@ -57,11 +101,26 @@ function Fleet() {
   }, []);
 
   const columns = [
-    { key: "fleetNo", label: "Fleet No" },
-    { key: "fleetId", label: "Fleet ID" },
-    { key: "status", label: "Status" },
-    { key: "driver", label: "Driver" },
-    { key: "location", label: "Location" },
+    {
+      key: "fleetNo",
+      label: "Fleet No",
+    },
+    {
+      key: "fleetId",
+      label: "Fleet ID",
+    },
+    {
+      key: "status",
+      label: "Status",
+    },
+    {
+      key: "driver",
+      label: "Driver",
+    },
+    {
+      key: "location",
+      label: "Location",
+    },
   ];
 
   return (
@@ -86,17 +145,22 @@ function Fleet() {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent:
+              "space-between",
             alignItems: "center",
             gap: "20px",
           }}
         >
-          <SearchBar placeholder="Search Fleet..." />
+          <SearchBar
+            placeholder="Search Fleet..."
+          />
 
           <PrimaryButton
             text="ADD FLEET"
             onClick={() =>
-              navigate("/fleet-add")
+              navigate(
+                "/fleet-add"
+              )
             }
           />
         </div>
@@ -109,26 +173,48 @@ function Fleet() {
           <DataTable
             columns={columns}
             data={fleets}
-            renderCell={(key, value, row) => {
-              if (key === "status") {
+            headerFontSize="26px"
+            cellFontSize="21px"
+            renderCell={(
+              key,
+              value,
+              row
+            ) => {
+              if (
+                key === "status"
+              ) {
                 return (
-                  <StatusBadge status={value} />
+                  <StatusBadge
+                    status={value}
+                  />
                 );
               }
 
-              if (key === "location") {
+              if (
+                key === "location"
+              ) {
                 return (
                   <span
                     onClick={() =>
-                      navigate("/fleet-live", {
-                        state: row,
-                      })
+                      navigate(
+                        "/fleet-live",
+                        {
+                          state:
+                            row,
+                        }
+                      )
                     }
                     style={{
-                      cursor: "pointer",
-                      color: "white",
-                      textDecoration: "underline",
-                      fontWeight: "500",
+                      cursor:
+                        "pointer",
+                      color:
+                        "white",
+                      textDecoration:
+                        "underline",
+                      fontWeight:
+                        "500",
+                      fontSize:
+                        "20px",
                     }}
                   >
                     View Location

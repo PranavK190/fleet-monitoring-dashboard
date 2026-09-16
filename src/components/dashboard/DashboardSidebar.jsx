@@ -8,7 +8,8 @@ function DashboardSidebar() {
     localStorage.getItem("currentUser")
   );
 
-  const userName = currentUser?.name || "User";
+  const userName =
+    currentUser?.name || "User";
 
   function handleLogout() {
     localStorage.removeItem("currentUser");
@@ -29,17 +30,18 @@ function DashboardSidebar() {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "18px",
-          padding: "25px 20px",
+          gap: "16px",
+          padding: "22px 18px",
         }}
       >
-        <Avatar size="70px" />
+        <Avatar size="65px" />
 
         <h2
           style={{
             color: "#6FB2FF",
             margin: 0,
-            fontSize: "34px",
+            fontSize: "30px",
+            fontWeight: "600",
           }}
         >
           {userName}
@@ -49,24 +51,38 @@ function DashboardSidebar() {
       {/* Menu */}
       <div
         style={{
-          marginTop: "20px",
-          borderTop: "1px solid rgba(255,255,255,0.3)",
+          marginTop: "18px",
+          borderTop:
+            "1px solid rgba(255,255,255,0.3)",
         }}
       >
         <MenuItem
           text="Active Fleets"
           active={true}
-          onClick={() => navigate("/fleet")}
+          onClick={() =>
+            navigate("/fleet")
+          }
         />
 
         <MenuItem
           text="Drivers List"
-          onClick={() => navigate("/driver-list")}
+          onClick={() =>
+            navigate("/driver-list")
+          }
+        />
+
+        <MenuItem
+          text="Alerts"
+          onClick={() =>
+            navigate("/alert-list")
+          }
         />
 
         <MenuItem
           text="Profile"
-          onClick={() => navigate("/profile")}
+          onClick={() =>
+            navigate("/profile")
+          }
         />
 
         <MenuItem
@@ -78,18 +94,29 @@ function DashboardSidebar() {
   );
 }
 
-function MenuItem({ text, active = false, onClick }) {
+function MenuItem({
+  text,
+  active = false,
+  onClick,
+}) {
   return (
     <div
       onClick={onClick}
       style={{
-        padding: "24px 20px",
+        padding: "20px 15px",
+        minHeight: "70px",
+        boxSizing: "border-box",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         cursor: "pointer",
-        borderBottom: "1px solid rgba(255,255,255,0.3)",
+        borderBottom:
+          "1px solid rgba(255,255,255,0.3)",
         textAlign: "center",
-        fontSize: "28px",
+        fontSize: "24px",
         fontWeight: active ? "700" : "400",
         color: "white",
+        lineHeight: "1.2",
       }}
     >
       {text}

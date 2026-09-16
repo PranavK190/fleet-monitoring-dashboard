@@ -1,17 +1,19 @@
 function DashboardHeader({
-  title = "Fleet Monitoring System",
+  title = "AutoSentinel",
   subtitle = "Track Smarter. Drive Better.",
   rightText = "WELCOME BACK !",
-}){
+}) {
   return (
     <div
       style={{
-        height: "160px",
-        borderBottom: "2px solid rgba(255,255,255,0.35)",
+        height: "150px",
+        borderBottom:
+          "2px solid rgba(255,255,255,0.35)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "0 40px",
+        padding: "0 35px",
+        boxSizing: "border-box",
       }}
     >
       {/* Left Side */}
@@ -20,7 +22,7 @@ function DashboardHeader({
           style={{
             color: "white",
             margin: 0,
-            fontSize: "42px",
+            fontSize: "38px",
             fontWeight: "700",
           }}
         >
@@ -30,8 +32,9 @@ function DashboardHeader({
         <p
           style={{
             color: "#9FC8FF",
-            marginTop: "10px",
-            fontSize: "22px",
+            marginTop: "8px",
+            marginBottom: 0,
+            fontSize: "20px",
           }}
         >
           {subtitle}
@@ -42,9 +45,10 @@ function DashboardHeader({
       <h1
         style={{
           color: "white",
-          fontSize: "52px",
+          fontSize: "44px",
           fontWeight: "500",
           margin: 0,
+          whiteSpace: "nowrap",
         }}
       >
         {rightText}

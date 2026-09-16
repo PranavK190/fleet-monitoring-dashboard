@@ -7,11 +7,12 @@ import {
 } from "../../services/fleet-service";
 
 import PageHeader from "../../components/layout/PageHeader";
-import VideoPlaceholder from "../../components/common/VideoPlaceholder";
 import PrimaryButton from "../../components/common/PrimaryButton";
 
 function displayValue(value) {
-  return value !== null && value !== undefined && value !== ""
+  return value !== null &&
+    value !== undefined &&
+    value !== ""
     ? value
     : "N/A";
 }
@@ -20,13 +21,23 @@ function FleetLiveLocation() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const [fleetData, setFleetData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [deleting, setDeleting] = useState(false);
+  const [fleetData, setFleetData] =
+    useState(null);
 
+  const [loading, setLoading] =
+    useState(true);
+
+  const [deleting, setDeleting] =
+    useState(false);
+
+  /*
+   * Load fleet information.
+   */
   useEffect(() => {
     async function loadFleetLocation() {
-      const fleetId = state?.id || state?.fleetId;
+      const fleetId =
+        state?.id ||
+        state?.fleetId;
 
       if (!fleetId) {
         setLoading(false);
@@ -34,7 +45,10 @@ function FleetLiveLocation() {
       }
 
       try {
-        const data = await getFleetLiveLocation(fleetId);
+        const data =
+          await getFleetLiveLocation(
+            fleetId
+          );
 
         setFleetData(data);
       } catch (error) {
@@ -59,43 +73,70 @@ function FleetLiveLocation() {
     fleet?.longitude !== null &&
     fleet?.longitude !== undefined
       ? `${fleet.latitude}, ${fleet.longitude}`
-      : "N/A";
+      : "GPS Not Found";
 
   function handleUpdateFleet() {
-    if (!fleet?.id) return;
+    if (!fleet?.id) {
+      return;
+    }
 
-    navigate("/fleet-update", {
-      state: {
-        id: fleet.id,
-        fleet_name: fleet.fleet_name,
-        vehicle_number: fleet.vehicle_number,
-        driver_id: fleet.driver_id,
-        status: fleet.status,
-        latitude: fleet.latitude,
-        longitude: fleet.longitude,
-      },
-    });
+    navigate(
+      "/fleet-update",
+      {
+        state: {
+          id: fleet.id,
+          fleet_name:
+            fleet.fleet_name,
+          vehicle_number:
+            fleet.vehicle_number,
+          driver_id:
+            fleet.driver_id,
+          status:
+            fleet.status,
+          latitude:
+            fleet.latitude,
+          longitude:
+            fleet.longitude,
+          start:
+            fleet.start,
+          destination:
+            fleet.destination,
+          fleet_code:
+            fleet.fleet_code,
+        },
+      }
+    );
   }
 
   async function handleDeleteFleet() {
-    if (!fleet?.id) return;
+    if (!fleet?.id) {
+      return;
+    }
 
-    const confirmed = window.confirm(
-      `Are you sure you want to delete ${displayValue(
-        fleet.fleet_name
-      )}? This action cannot be undone.`
-    );
+    const confirmed =
+      window.confirm(
+        `Are you sure you want to delete ${displayValue(
+          fleet.fleet_name
+        )}? This action cannot be undone.`
+      );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     try {
       setDeleting(true);
 
-      await deleteFleet(fleet.id);
+      await deleteFleet(
+        fleet.id
+      );
 
-      navigate("/fleet", {
-        replace: true,
-      });
+      navigate(
+        "/fleet",
+        {
+          replace: true,
+        }
+      );
     } catch (error) {
       console.error(
         "Failed to delete fleet:",
@@ -154,23 +195,55 @@ function FleetLiveLocation() {
             padding: "35px 55px 60px",
           }}
         >
-          {/* Video Row */}
+          {/* Live Video */}
           <div
             style={{
+              width: "100%",
+              maxWidth: "1050px",
+              height: "400px",
+              margin: "0 auto 45px",
+              backgroundColor: "#111",
+              borderRadius: "6px",
+              overflow: "hidden",
               display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "45px",
+              flexDirection: "column",
             }}
           >
-            <VideoPlaceholder
-              width="520px"
-              height="330px"
-            />
+            {/* Video Title */}
+            <div
+              style={{
+                height: "55px",
+                backgroundColor: "#76AFF1",
+                color: "#111",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "24px",
+                fontWeight: "600",
+              }}
+            >
+              LIVE VIDEO
+            </div>
 
-            <VideoPlaceholder
-              width="520px"
-              height="330px"
-            />
+            {/* Video Area */}
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#111",
+              }}
+            >
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "22px",
+                }}
+              >
+                Live stream not started
+              </span>
+            </div>
           </div>
 
           {/* Information */}
@@ -191,7 +264,10 @@ function FleetLiveLocation() {
             >
               <InfoField
                 label="Fleet ID"
-                value={displayValue(fleet?.id)}
+                value={displayValue(
+                  fleet?.fleet_code ||
+                    fleet?.id
+                )}
               />
 
               <InfoField
@@ -233,15 +309,27 @@ function FleetLiveLocation() {
               }}
             >
               <InfoField
+                label="Start"
+                value={displayValue(
+                  fleet?.start
+                )}
+              />
+
+              <InfoField
+                label="Destination"
+                value={displayValue(
+                  fleet?.destination
+                )}
+              />
+
+              <InfoField
                 label="Location"
                 value={location}
               />
 
               <InfoField
                 label="Status"
-                value={displayValue(
-                  fleet?.status
-                )}
+                value="Active"
               />
             </div>
           </div>
@@ -258,7 +346,9 @@ function FleetLiveLocation() {
           >
             <PrimaryButton
               text="UPDATE FLEET"
-              onClick={handleUpdateFleet}
+              onClick={
+                handleUpdateFleet
+              }
             />
 
             <PrimaryButton
@@ -268,7 +358,10 @@ function FleetLiveLocation() {
                   : "DELETE FLEET"
               }
               backgroundColor="#DC2626"
-              onClick={handleDeleteFleet}
+              onClick={
+                handleDeleteFleet
+              }
+              disabled={deleting}
             />
           </div>
         </div>
@@ -277,7 +370,10 @@ function FleetLiveLocation() {
   );
 }
 
-function InfoField({ label, value }) {
+function InfoField({
+  label,
+  value,
+}) {
   return (
     <div
       style={{
@@ -288,7 +384,9 @@ function InfoField({ label, value }) {
         color: "#111",
       }}
     >
-      <strong>{label}</strong>
+      <strong>
+        {label}
+      </strong>
 
       {` : ${value}`}
     </div>

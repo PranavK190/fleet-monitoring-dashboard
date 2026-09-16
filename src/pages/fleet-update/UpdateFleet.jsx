@@ -19,18 +19,29 @@ function UpdateFleet() {
   const [fleetName, setFleetName] = useState("");
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [driverId, setDriverId] = useState("");
-  const [status, setStatus] = useState("Active");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
+  const [start, setStart] = useState("");
+  const [destination, setDestination] = useState("");
 
   const [drivers, setDrivers] = useState([]);
-  const [loadingDrivers, setLoadingDrivers] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [errors, setErrors] = useState({});
 
+  const [loadingDrivers, setLoadingDrivers] =
+    useState(true);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [errors, setErrors] =
+    useState({});
+
+  /*
+   * Load fleet information into the form.
+   */
   useEffect(() => {
     if (!fleet?.id) {
-      setLoadingDrivers(false);
+      navigate("/fleet", {
+        replace: true,
+      });
+
       return;
     }
 
@@ -52,50 +63,57 @@ function UpdateFleet() {
         ""
     );
 
-    setStatus(
-      fleet.status ||
-        "Active"
+    setStart(
+      fleet.start || ""
     );
 
-    setLatitude(
-      fleet.latitude !== null &&
-        fleet.latitude !== undefined
-        ? String(fleet.latitude)
-        : ""
+    setDestination(
+      fleet.destination || ""
     );
+  }, [fleet, navigate]);
 
-    setLongitude(
-      fleet.longitude !== null &&
-        fleet.longitude !== undefined
-        ? String(fleet.longitude)
-        : ""
-    );
-  }, [fleet]);
-
+  /*
+   * Load:
+   * 1. All unassigned drivers
+   * 2. Current fleet's assigned driver
+   *
+   * Drivers assigned to other fleets
+   * will not appear.
+   */
   useEffect(() => {
-    async function loadAvailableDrivers() {
-      try {
-        const availableDrivers =
-          await getAvailableDrivers();
+    async function loadDrivers() {
+      if (!fleet?.id) {
+        return;
+      }
 
-        setDrivers(availableDrivers);
+      try {
+        setLoadingDrivers(true);
+
+        const data =
+          await getAvailableDrivers(
+            fleet.driver_id ||
+              fleet.driverId ||
+              null
+          );
+
+        setDrivers(data);
       } catch (error) {
         console.error(
-          "Failed to load available drivers:",
+          "Failed to load drivers:",
           error
         );
 
         setErrors({
           driver:
-            "Failed to load available drivers.",
+            "Failed to load drivers.",
         });
       } finally {
         setLoadingDrivers(false);
       }
     }
 
-    loadAvailableDrivers();
-  }, []);
+    loadDrivers();
+  }, [fleet]);
 
   function validateForm() {
     const newErrors = {};
@@ -115,37 +133,14 @@ function UpdateFleet() {
         "Please select a driver.";
     }
 
-    if (!status) {
-      newErrors.status =
-        "Status is required.";
+    if (!start.trim()) {
+      newErrors.start =
+        "Start location is required.";
     }
 
-    if (latitude.trim()) {
-      const latitudeValue =
-        Number(latitude);
-
-      if (
-        Number.isNaN(latitudeValue) ||
-        latitudeValue < -90 ||
-        latitudeValue > 90
-      ) {
-        newErrors.latitude =
-          "Latitude must be between -90 and 90.";
-      }
-    }
-
-    if (longitude.trim()) {
-      const longitudeValue =
-        Number(longitude);
-
-      if (
-        Number.isNaN(longitudeValue) ||
-        longitudeValue < -180 ||
-        longitudeValue > 180
-      ) {
-        newErrors.longitude =
-          "Longitude must be between -180 and 180.";
-      }
+    if (!destination.trim()) {
+      newErrors.destination =
+        "Destination is required.";
     }
 
     setErrors(newErrors);
@@ -173,29 +168,25 @@ function UpdateFleet() {
       setSaving(true);
       setErrors({});
 
-      await updateFleet(fleet.id, {
-        fleet_name:
-          fleetName.trim(),
+      await updateFleet(
+        fleet.id,
+        {
+          fleet_name:
+            fleetName.trim(),
 
-        vehicle_number:
-          vehicleNumber.trim(),
+          vehicle_number:
+            vehicleNumber.trim(),
 
-        driver_id:
-          driverId,
+          driver_id:
+            driverId,
 
-        status:
-          status,
+          start:
+            start.trim(),
 
-        latitude:
-          latitude.trim()
-            ? Number(latitude)
-            : null,
-
-        longitude:
-          longitude.trim()
-            ? Number(longitude)
-            : null,
-      });
+          destination:
+            destination.trim(),
+        }
+      );
 
       navigate(
         "/fleet-live",
@@ -238,44 +229,7 @@ function UpdateFleet() {
   }
 
   if (!fleet?.id) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#14004D",
-        }}
-      >
-        <PageHeader
-          title="Update Fleet"
-          showBackButton={true}
-          backRoute="/fleet"
-          showAlertButton={true}
-          alertRoute="/alert"
-        />
-
-        <div
-          style={{
-            color: "white",
-            fontSize: "24px",
-            textAlign: "center",
-            paddingTop: "100px",
-          }}
-        >
-          <p>
-            Fleet information is not available.
-          </p>
-
-          <PrimaryButton
-            text="BACK TO FLEETS"
-            onClick={() =>
-              navigate("/fleet", {
-                replace: true,
-              })
-            }
-          />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -289,6 +243,9 @@ function UpdateFleet() {
         title="Update Fleet"
         showBackButton={true}
         backRoute="/fleet-live"
+        backState={{
+          id: fleet.id,
+        }}
         showAlertButton={true}
         alertRoute="/alert"
       />
@@ -309,6 +266,24 @@ function UpdateFleet() {
             gap: "25px",
           }}
         >
+          {/* Fleet ID */}
+          <div
+            style={fieldContainerStyle}
+          >
+            <div style={labelStyle}>
+              FLEET ID
+            </div>
+
+            <div
+              style={readOnlyValueStyle}
+            >
+              {fleet.fleet_code ||
+                fleet.fleetId ||
+                "N/A"}
+            </div>
+          </div>
+
+          {/* Fleet Name */}
           <InputField
             label="Fleet Name"
             placeholder="Enter fleet name"
@@ -326,6 +301,7 @@ function UpdateFleet() {
             </p>
           )}
 
+          {/* Vehicle Number */}
           <InputField
             label="Vehicle Number"
             placeholder="Enter vehicle number"
@@ -343,6 +319,7 @@ function UpdateFleet() {
             </p>
           )}
 
+          {/* Driver */}
           <div
             style={fieldContainerStyle}
           >
@@ -366,18 +343,6 @@ function UpdateFleet() {
                   : "Select a driver"}
               </option>
 
-              {driverId &&
-                !drivers.some(
-                  (driver) =>
-                    driver.id === driverId
-                ) && (
-                  <option
-                    value={driverId}
-                  >
-                    Current Assigned Driver
-                  </option>
-                )}
-
               {drivers.map(
                 (driver) => (
                   <option
@@ -400,69 +365,39 @@ function UpdateFleet() {
             </p>
           )}
 
-          <div
-            style={fieldContainerStyle}
-          >
-            <div style={labelStyle}>
-              STATUS
-            </div>
-
-            <select
-              value={status}
-              onChange={(event) =>
-                setStatus(
-                  event.target.value
-                )
-              }
-              style={selectStyle}
-            >
-              <option value="Active">
-                Active
-              </option>
-
-              <option value="Inactive">
-                Inactive
-              </option>
-            </select>
-          </div>
-
-          {errors.status && (
-            <p style={errorStyle}>
-              {errors.status}
-            </p>
-          )}
-
+          {/* Start */}
           <InputField
-            label="Latitude"
-            placeholder="Optional"
-            value={latitude}
+            label="Start"
+            placeholder="Enter start location"
+            value={start}
             onChange={(event) =>
-              setLatitude(
+              setStart(
                 event.target.value
               )
             }
           />
 
-          {errors.latitude && (
+          {errors.start && (
             <p style={errorStyle}>
-              {errors.latitude}
+              {errors.start}
             </p>
           )}
 
+          {/* Destination */}
           <InputField
-            label="Longitude"
-            placeholder="Optional"
-            value={longitude}
+            label="Destination"
+            placeholder="Enter destination"
+            value={destination}
             onChange={(event) =>
-              setLongitude(
+              setDestination(
                 event.target.value
               )
             }
           />
 
-          {errors.longitude && (
+          {errors.destination && (
             <p style={errorStyle}>
-              {errors.longitude}
+              {errors.destination}
             </p>
           )}
 
@@ -472,6 +407,7 @@ function UpdateFleet() {
             </p>
           )}
 
+          {/* Buttons */}
           <div
             style={{
               display: "flex",
@@ -489,12 +425,14 @@ function UpdateFleet() {
               onClick={
                 handleUpdateFleet
               }
+              disabled={saving}
             />
 
             <PrimaryButton
               text="CANCEL"
               backgroundColor="#555555"
               onClick={handleCancel}
+              disabled={saving}
             />
           </div>
         </div>
@@ -530,6 +468,16 @@ const selectStyle = {
   border: "none",
   outline: "none",
   backgroundColor: "#76AFF1",
+  padding: "0 16px",
+  fontSize: "20px",
+  color: "#111111",
+  cursor: "pointer",
+};
+
+const readOnlyValueStyle = {
+  flex: 1,
+  display: "flex",
+  alignItems: "center",
   padding: "0 16px",
   fontSize: "20px",
   color: "#111111",

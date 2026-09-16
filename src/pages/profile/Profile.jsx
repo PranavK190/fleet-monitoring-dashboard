@@ -8,7 +8,9 @@ import InputField from "../../components/common/InputField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 
 function displayValue(value) {
-  return value !== null && value !== undefined && value !== ""
+  return value !== null &&
+    value !== undefined &&
+    value !== ""
     ? value
     : "N/A";
 }
@@ -27,22 +29,33 @@ function Profile() {
   useEffect(() => {
     async function loadUserProfile() {
       try {
-        const currentUser = JSON.parse(
-          localStorage.getItem("currentUser")
-        );
+        const currentUser =
+          JSON.parse(
+            localStorage.getItem(
+              "currentUser"
+            )
+          );
 
         if (!currentUser?.id) {
-          throw new Error("No logged-in user found.");
+          throw new Error(
+            "No logged-in user found."
+          );
         }
 
-        const data = await getUserProfile(currentUser.id);
+        const data =
+          await getUserProfile(
+            currentUser.id
+          );
 
         setUser(data);
         setName(data.name || "");
         setEmail(data.email || "");
         setPhone(data.phone || "");
       } catch (error) {
-        console.error("Failed to load user profile:", error);
+        console.error(
+          "Failed to load user profile:",
+          error
+        );
       } finally {
         setLoading(false);
       }
@@ -61,7 +74,7 @@ function Profile() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "24px",
+          fontSize: "22px",
         }}
       >
         Loading profile...
@@ -84,9 +97,10 @@ function Profile() {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
-          gap: "80px",
-          padding: "50px",
+          justifyContent:
+            "space-between",
+          gap: "70px",
+          padding: "45px",
         }}
       >
         {/* Left Section */}
@@ -108,21 +122,25 @@ function Profile() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "90px",
+              fontSize: "85px",
               color: "white",
             }}
           >
             👤
           </div>
 
+          {/*
           <PrimaryButton
             text="ADD PHOTO"
             width="150px"
             height="45px"
             onClick={() =>
-              alert("Profile photo functionality pending")
+              alert(
+                "Profile photo functionality pending"
+              )
             }
           />
+          */}
         </div>
 
         {/* Right Section */}
@@ -131,7 +149,7 @@ function Profile() {
             flex: 1,
             display: "flex",
             flexDirection: "column",
-            gap: "22px",
+            gap: "20px",
           }}
         >
           <InputField
@@ -144,7 +162,9 @@ function Profile() {
           <InputField
             label="USER ID"
             placeholder=""
-            value={displayValue(user?.id)}
+            value={displayValue(
+              user?.id
+            )}
             readOnly={true}
           />
 
@@ -165,16 +185,21 @@ function Profile() {
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
-              gap: "40px",
-              marginTop: "30px",
+              justifyContent:
+                "center",
+              gap: "35px",
+              marginTop: "25px",
             }}
           >
             <PrimaryButton
               text="UPDATE PROFILE"
               width="220px"
               height="60px"
-              onClick={() => navigate("/update-profile")}
+              onClick={() =>
+                navigate(
+                  "/update-profile"
+                )
+              }
             />
 
             <PrimaryButton
@@ -182,9 +207,13 @@ function Profile() {
               width="180px"
               height="60px"
               onClick={() => {
-  localStorage.removeItem("currentUser");
-  window.location.href = "/login";
-}}
+                localStorage.removeItem(
+                  "currentUser"
+                );
+
+                window.location.href =
+                  "/login";
+              }}
             />
           </div>
         </div>

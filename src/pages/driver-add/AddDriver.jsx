@@ -13,7 +13,6 @@ function AddDriver() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [contact, setContact] = useState("");
-  const [employeeId, setEmployeeId] = useState("");
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -25,36 +24,40 @@ function AddDriver() {
     if (!name.trim()) {
       newErrors.name = "Name is required.";
     } else if (!/^[A-Za-z\s]+$/.test(name.trim())) {
-      newErrors.name = "Name can contain only letters and spaces.";
+      newErrors.name =
+        "Name can contain only letters and spaces.";
     }
 
     // Age
     if (!age.trim()) {
       newErrors.age = "Age is required.";
     } else if (!/^\d+$/.test(age.trim())) {
-      newErrors.age = "Age must contain only numbers.";
-    } else if (Number(age) < 18 || Number(age) > 70) {
-      newErrors.age = "Age must be between 18 and 70.";
+      newErrors.age =
+        "Age must contain only numbers.";
+    } else if (
+      Number(age) < 18 ||
+      Number(age) > 70
+    ) {
+      newErrors.age =
+        "Age must be between 18 and 70.";
     }
 
     // Contact
     if (!contact.trim()) {
-      newErrors.contact = "Contact number is required.";
-    } else if (!/^\d{10}$/.test(contact.trim())) {
-      newErrors.contact = "Contact number must contain exactly 10 digits.";
-    }
-
-    // Employee ID
-    if (!employeeId.trim()) {
-      newErrors.employeeId = "Employee ID is required.";
-    } else if (!/^[A-Za-z0-9]+$/.test(employeeId.trim())) {
-      newErrors.employeeId =
-        "Employee ID can contain only letters and numbers.";
+      newErrors.contact =
+        "Contact number is required.";
+    } else if (
+      !/^\d{10}$/.test(contact.trim())
+    ) {
+      newErrors.contact =
+        "Contact number must contain exactly 10 digits.";
     }
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return (
+      Object.keys(newErrors).length === 0
+    );
   }
 
   async function handleAddDriver() {
@@ -64,20 +67,27 @@ function AddDriver() {
 
     try {
       setLoading(true);
+      setErrors({});
 
       await createDriver({
         name: name.trim(),
         age: Number(age),
         contact: contact.trim(),
-        employee_id: employeeId.trim(),
       });
 
-      navigate("/driver-list");
+      navigate("/driver-list", {
+        replace: true,
+      });
     } catch (error) {
-      console.error("Failed to add driver:", error);
+      console.error(
+        "Failed to add driver:",
+        error
+      );
 
       setErrors({
-        submit: "Failed to add driver. Please try again.",
+        submit:
+          error.message ||
+          "Failed to add driver. Please try again.",
       });
     } finally {
       setLoading(false);
@@ -112,11 +122,18 @@ function AddDriver() {
             label="NAME"
             placeholder="Enter driver name"
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) =>
+              setName(event.target.value)
+            }
           />
 
           {errors.name && (
-            <p style={{ color: "#ff6b6b", marginTop: "6px" }}>
+            <p
+              style={{
+                color: "#ff6b6b",
+                marginTop: "6px",
+              }}
+            >
               {errors.name}
             </p>
           )}
@@ -127,11 +144,18 @@ function AddDriver() {
             label="AGE"
             placeholder="Enter driver age"
             value={age}
-            onChange={(event) => setAge(event.target.value)}
+            onChange={(event) =>
+              setAge(event.target.value)
+            }
           />
 
           {errors.age && (
-            <p style={{ color: "#ff6b6b", marginTop: "6px" }}>
+            <p
+              style={{
+                color: "#ff6b6b",
+                marginTop: "6px",
+              }}
+            >
               {errors.age}
             </p>
           )}
@@ -142,27 +166,19 @@ function AddDriver() {
             label="CONTACT"
             placeholder="Enter 10-digit contact number"
             value={contact}
-            onChange={(event) => setContact(event.target.value)}
+            onChange={(event) =>
+              setContact(event.target.value)
+            }
           />
 
           {errors.contact && (
-            <p style={{ color: "#ff6b6b", marginTop: "6px" }}>
+            <p
+              style={{
+                color: "#ff6b6b",
+                marginTop: "6px",
+              }}
+            >
               {errors.contact}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <InputField
-            label="EMPLOYEE ID"
-            placeholder="Enter employee ID"
-            value={employeeId}
-            onChange={(event) => setEmployeeId(event.target.value)}
-          />
-
-          {errors.employeeId && (
-            <p style={{ color: "#ff6b6b", marginTop: "6px" }}>
-              {errors.employeeId}
             </p>
           )}
         </div>
@@ -190,14 +206,21 @@ function AddDriver() {
             text="CANCEL"
             width="180px"
             height="55px"
-            onClick={() => navigate("/driver-list")}
+            onClick={() =>
+              navigate("/driver-list")
+            }
           />
 
           <PrimaryButton
-            text={loading ? "ADDING..." : "ADD DRIVER"}
+            text={
+              loading
+                ? "ADDING..."
+                : "ADD DRIVER"
+            }
             width="180px"
             height="55px"
             onClick={handleAddDriver}
+            disabled={loading}
           />
         </div>
       </div>

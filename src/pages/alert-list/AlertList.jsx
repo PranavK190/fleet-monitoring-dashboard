@@ -8,7 +8,9 @@ import SearchBar from "../../components/common/SearchBar";
 import DataTable from "../../components/common/DataTable";
 
 function displayValue(value) {
-  return value !== null && value !== undefined && value !== ""
+  return value !== null &&
+    value !== undefined &&
+    value !== ""
     ? value
     : "N/A";
 }
@@ -23,24 +25,41 @@ function AlertList() {
       try {
         const data = await getAlerts();
 
-        const formattedAlerts = data.map((alert) => ({
-  id: alert.id,
-  driverName: displayValue(alert.driverName),
-  fleetNo: displayValue(alert.fleetNo),
-  status: displayValue(alert.status),
-  area: displayValue(alert.area),
+        const formattedAlerts = data.map(
+          (alert) => ({
+            id: alert.id,
 
-  driverId: alert.driverId,
-  fleetId: alert.fleetId,
-  eventType: alert.eventType,
-  severity: alert.severity,
-  resolved: alert.resolved,
-  createdAt: alert.createdAt,
-}));
+            driverName: displayValue(
+              alert.driverName
+            ),
+
+            fleetNo: displayValue(
+              alert.fleetNo
+            ),
+
+            status: displayValue(
+              alert.status
+            ),
+
+            area: displayValue(
+              alert.area
+            ),
+
+            driverId: alert.driverId,
+            fleetId: alert.fleetId,
+            eventType: alert.eventType,
+            severity: alert.severity,
+            resolved: alert.resolved,
+            createdAt: alert.createdAt,
+          })
+        );
 
         setAlerts(formattedAlerts);
       } catch (error) {
-        console.error("Failed to load alerts:", error);
+        console.error(
+          "Failed to load alerts:",
+          error
+        );
       }
     }
 
@@ -48,11 +67,26 @@ function AlertList() {
   }, []);
 
   const columns = [
-    { key: "driverName", label: "Driver Name" },
-    { key: "fleetNo", label: "Fleet No" },
-    { key: "status", label: "Status" },
-    { key: "area", label: "Area" },
-    { key: "action", label: "Action" },
+    {
+      key: "driverName",
+      label: "Driver Name",
+    },
+    {
+      key: "fleetNo",
+      label: "Fleet No",
+    },
+    {
+      key: "status",
+      label: "Status",
+    },
+    {
+      key: "area",
+      label: "Area",
+    },
+    {
+      key: "action",
+      label: "Action",
+    },
   ];
 
   return (
@@ -65,6 +99,7 @@ function AlertList() {
       <PageHeader
         title="Alert List"
         showBackButton={true}
+        backRoute="/dashboard"
       />
 
       <div
@@ -84,6 +119,8 @@ function AlertList() {
         <DataTable
           columns={columns}
           data={alerts}
+          headerFontSize="26px"
+          cellFontSize="21px"
           renderCell={(key, value, row) => {
             if (key === "action") {
               return (
@@ -96,8 +133,10 @@ function AlertList() {
                   style={{
                     cursor: "pointer",
                     color: "white",
-                    textDecoration: "underline",
+                    textDecoration:
+                      "underline",
                     fontWeight: "500",
+                    fontSize: "21px",
                   }}
                 >
                   View Action

@@ -2,6 +2,8 @@ function DataTable({
   columns = [],
   data = [],
   renderCell,
+  headerFontSize = "32px",
+  cellFontSize = "26px",
 }) {
   return (
     <table
@@ -18,10 +20,12 @@ function DataTable({
               key={column.key}
               style={{
                 padding: "20px",
-                fontSize: "32px",
+                fontSize: headerFontSize,
                 fontWeight: "600",
-                borderBottom: "2px solid rgba(255,255,255,0.3)",
-                borderRight: "1px solid rgba(255,255,255,0.2)",
+                borderBottom:
+                  "2px solid rgba(255,255,255,0.3)",
+                borderRight:
+                  "1px solid rgba(255,255,255,0.2)",
                 textAlign: "center",
               }}
             >
@@ -39,13 +43,18 @@ function DataTable({
                 key={column.key}
                 style={{
                   padding: "22px",
-                  fontSize: "26px",
+                  fontSize: cellFontSize,
                   textAlign: "center",
-                  borderRight: "1px solid rgba(255,255,255,0.15)",
+                  borderRight:
+                    "1px solid rgba(255,255,255,0.15)",
                 }}
               >
                 {renderCell
-                  ? renderCell(column.key, row[column.key], row)
+                  ? renderCell(
+                      column.key,
+                      row[column.key],
+                      row
+                    )
                   : row[column.key]}
               </td>
             ))}

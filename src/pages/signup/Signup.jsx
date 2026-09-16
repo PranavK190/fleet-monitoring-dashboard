@@ -24,6 +24,13 @@ function Signup() {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  function isValidEmail() {
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    return emailPattern.test(email.trim());
+  }
+
   function isValidPhoneNumber() {
     const digits = phoneNumber.replace(/\D/g, "");
 
@@ -69,17 +76,30 @@ function Signup() {
       !password ||
       !confirmPassword
     ) {
-      setErrorMessage("Please fill in all required fields.");
+      setErrorMessage(
+        "Please fill in all required fields."
+      );
+      return;
+    }
+
+    if (!isValidEmail()) {
+      setErrorMessage(
+        "Please enter a valid email address."
+      );
       return;
     }
 
     if (!isValidPhoneNumber()) {
-      setErrorMessage("Please enter a valid phone number.");
+      setErrorMessage(
+        "Please enter a valid phone number."
+      );
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match.");
+      setErrorMessage(
+        "Passwords do not match."
+      );
       return;
     }
 
@@ -111,7 +131,11 @@ function Signup() {
         navigate("/login");
       }, 1500);
     } catch (error) {
-      console.error("Signup failed:", error);
+      console.error(
+        "Signup failed:",
+        error
+      );
+
       setErrorMessage(
         "Something went wrong while creating the account."
       );
@@ -128,7 +152,10 @@ function Signup() {
         color: "white",
       }}
     >
-      <PageHeader title="" showBackButton={true} />
+      <PageHeader
+        title=""
+        showBackButton={true}
+      />
 
       <div
         style={{
@@ -159,13 +186,17 @@ function Signup() {
           <InputField
             label="FULL NAME"
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={(e) =>
+              setFullName(e.target.value)
+            }
           />
 
           <InputField
             label="EMAIL"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
           />
 
           <div
@@ -175,7 +206,11 @@ function Signup() {
               gap: "15px",
             }}
           >
-            <div style={{ width: "130px" }}>
+            <div
+              style={{
+                width: "130px",
+              }}
+            >
               <label
                 style={{
                   display: "block",
@@ -188,68 +223,132 @@ function Signup() {
 
               <select
                 value={countryCode}
-                onChange={(e) => setCountryCode(e.target.value)}
+                onChange={(e) =>
+                  setCountryCode(
+                    e.target.value
+                  )
+                }
                 style={{
                   width: "100%",
                   background: "transparent",
                   color: "white",
                   border: "none",
-                  borderBottom: "1px solid white",
+                  borderBottom:
+                    "1px solid white",
                   padding: "10px 0",
                   fontSize: "18px",
                   outline: "none",
                 }}
               >
-                <option value="+91" style={{ color: "black" }}>
+                <option
+                  value="+91"
+                  style={{
+                    color: "black",
+                  }}
+                >
                   India (+91)
                 </option>
 
-                <option value="+1" style={{ color: "black" }}>
+                <option
+                  value="+1"
+                  style={{
+                    color: "black",
+                  }}
+                >
                   USA / Canada (+1)
                 </option>
 
-                <option value="+44" style={{ color: "black" }}>
+                <option
+                  value="+44"
+                  style={{
+                    color: "black",
+                  }}
+                >
                   UK (+44)
                 </option>
 
-                <option value="+61" style={{ color: "black" }}>
+                <option
+                  value="+61"
+                  style={{
+                    color: "black",
+                  }}
+                >
                   Australia (+61)
                 </option>
 
-                <option value="+49" style={{ color: "black" }}>
+                <option
+                  value="+49"
+                  style={{
+                    color: "black",
+                  }}
+                >
                   Germany (+49)
                 </option>
 
-                <option value="+971" style={{ color: "black" }}>
+                <option
+                  value="+971"
+                  style={{
+                    color: "black",
+                  }}
+                >
                   UAE (+971)
                 </option>
 
-                <option value="+65" style={{ color: "black" }}>
+                <option
+                  value="+65"
+                  style={{
+                    color: "black",
+                  }}
+                >
                   Singapore (+65)
                 </option>
               </select>
             </div>
 
-            <div style={{ flex: 1 }}>
+            <div
+              style={{
+                flex: 1,
+              }}
+            >
               <InputField
                 label="PHONE NUMBER"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) =>
+                  setPhoneNumber(
+                    e.target.value
+                  )
+                }
               />
             </div>
           </div>
 
-          <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "relative",
+            }}
+          >
             <InputField
               label="PASSWORD"
-              type={showPassword ? "text" : "password"}
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPassword(
+                  e.target.value
+                )
+              }
             />
 
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() =>
+                setShowPassword(
+                  !showPassword
+                )
+              }
               style={{
                 position: "absolute",
                 right: "0",
@@ -266,20 +365,32 @@ function Signup() {
             </button>
           </div>
 
-          <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "relative",
+            }}
+          >
             <InputField
               label="CONFIRM PASSWORD"
-              type={showConfirmPassword ? "text" : "password"}
+              type={
+                showConfirmPassword
+                  ? "text"
+                  : "password"
+              }
               value={confirmPassword}
               onChange={(e) =>
-                setConfirmPassword(e.target.value)
+                setConfirmPassword(
+                  e.target.value
+                )
               }
             />
 
             <button
               type="button"
               onClick={() =>
-                setShowConfirmPassword(!showConfirmPassword)
+                setShowConfirmPassword(
+                  !showConfirmPassword
+                )
               }
               style={{
                 position: "absolute",
@@ -333,7 +444,11 @@ function Signup() {
           }}
         >
           <PrimaryButton
-            text={loading ? "CREATING..." : "CREATE ACCOUNT"}
+            text={
+              loading
+                ? "CREATING..."
+                : "CREATE ACCOUNT"
+            }
             width="260px"
             onClick={handleSignup}
           />

@@ -8,7 +8,9 @@ import DataTable from "../../components/common/DataTable";
 import PrimaryButton from "../../components/common/PrimaryButton";
 
 function displayValue(value) {
-  return value !== null && value !== undefined && value !== ""
+  return value !== null &&
+    value !== undefined &&
+    value !== ""
     ? value
     : "N/A";
 }
@@ -39,37 +41,63 @@ function DriverList() {
 
   const [drivers, setDrivers] = useState([]);
 
-  const [searchType, setSearchType] = useState("name");
-  const [searchText, setSearchText] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [searchType, setSearchType] =
+    useState("name");
+
+  const [searchText, setSearchText] =
+    useState("");
+
+  const [filter, setFilter] =
+    useState("all");
 
   useEffect(() => {
     async function loadDrivers() {
       try {
-        const data = await getDrivers();
+        const data =
+          await getDrivers();
 
-        const formattedDrivers = data.map((driver) => ({
-          id: driver.id,
-          name: displayValue(driver.name),
-          driverId: displayValue(driver.employee_id),
+        const formattedDrivers =
+          data.map((driver) => ({
+            id: driver.id,
 
-          fleetNo:
-            driver.fleet_id !== null &&
-            driver.fleet_id !== undefined &&
-            driver.fleet_id !== ""
-              ? driver.fleet_id
-              : "Not Assigned",
+            name: displayValue(
+              driver.name
+            ),
 
-          fleetId: driver.fleet_id,
+            driverId: displayValue(
+              driver.employee_id
+            ),
 
-          lastActive: formatDateTime(
-            driver.created_at
-          ),
+            /*
+             * Display human-readable Fleet ID.
+             *
+             * fleet_id remains the internal UUID
+             * and is kept separately for filtering.
+             */
+            fleetNo:
+              driver.fleet?.fleet_code ||
+              "Not Assigned",
 
-          profile: "View Profile",
-        }));
+            /*
+             * Keep the internal UUID.
+             * This is used only to determine
+             * whether the driver has a fleet.
+             */
+            fleetId:
+              driver.fleet_id,
 
-        setDrivers(formattedDrivers);
+            lastActive:
+              formatDateTime(
+                driver.created_at
+              ),
+
+            profile:
+              "View Profile",
+          }));
+
+        setDrivers(
+          formattedDrivers
+        );
       } catch (error) {
         console.error(
           "Failed to load drivers:",
@@ -81,68 +109,84 @@ function DriverList() {
     loadDrivers();
   }, []);
 
-  const filteredDrivers = drivers.filter(
-    (driver) => {
-      /*
-       * Search filter
-       */
-      const searchValue =
-        searchType === "name"
-          ? driver.name
-          : driver.driverId;
+  const filteredDrivers =
+    drivers.filter(
+      (driver) => {
+        /*
+         * Search filter
+         */
+        const searchValue =
+          searchType === "name"
+            ? driver.name
+            : driver.driverId;
 
-      const matchesSearch =
-        searchValue
-          .toString()
-          .toLowerCase()
-          .includes(
-            searchText
-              .trim()
-              .toLowerCase()
-          );
+        const matchesSearch =
+          searchValue
+            .toString()
+            .toLowerCase()
+            .includes(
+              searchText
+                .trim()
+                .toLowerCase()
+            );
 
-      if (!matchesSearch) {
-        return false;
+        if (!matchesSearch) {
+          return false;
+        }
+
+        /*
+         * Active / Inactive filter
+         *
+         * A driver is ACTIVE when
+         * fleet_id is populated.
+         *
+         * A driver is INACTIVE when
+         * fleet_id is null.
+         */
+        const hasFleet =
+          driver.fleetId !== null &&
+          driver.fleetId !== undefined &&
+          driver.fleetId !== "";
+
+        if (
+          filter === "active" &&
+          !hasFleet
+        ) {
+          return false;
+        }
+
+        if (
+          filter === "inactive" &&
+          hasFleet
+        ) {
+          return false;
+        }
+
+        return true;
       }
-
-      /*
-       * Active / Inactive filter
-       *
-       * A driver is considered ACTIVE when
-       * fleet_id is populated.
-       *
-       * A driver is considered INACTIVE when
-       * fleet_id is null or empty.
-       */
-      const hasFleet =
-        driver.fleetId !== null &&
-        driver.fleetId !== undefined &&
-        driver.fleetId !== "";
-
-      if (
-        filter === "active" &&
-        !hasFleet
-      ) {
-        return false;
-      }
-
-      if (
-        filter === "inactive" &&
-        hasFleet
-      ) {
-        return false;
-      }
-
-      return true;
-    }
-  );
+    );
 
   const columns = [
-    { key: "name", label: "Name" },
-    { key: "driverId", label: "Driver ID" },
-    { key: "fleetNo", label: "Fleet No" },
-    { key: "lastActive", label: "Last Active" },
-    { key: "profile", label: "Profile" },
+    {
+      key: "name",
+      label: "Name",
+    },
+    {
+      key: "driverId",
+      label: "Driver ID",
+    },
+    {
+      key: "fleetNo",
+      label: "Fleet ID",
+    },
+    {
+      key: "lastActive",
+      label: "Last Active",
+    },
+    {
+      key: "profile",
+      label: "Profile",
+    },
   ];
 
   return (
@@ -161,11 +205,12 @@ function DriverList() {
       {/* Controls */}
       <div
         style={{
-          padding: "25px 50px 0",
+          padding: "22px 50px 0",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent:
+            "space-between",
           alignItems: "center",
-          gap: "25px",
+          gap: "22px",
         }}
       >
         {/* Search */}
@@ -186,13 +231,14 @@ function DriverList() {
               )
             }
             style={{
-              height: "50px",
-              padding: "0 15px",
-              backgroundColor: "#76AFF1",
+              height: "46px",
+              padding: "0 14px",
+              backgroundColor:
+                "#76AFF1",
               border: "none",
               borderRadius: "5px",
               outline: "none",
-              fontSize: "18px",
+              fontSize: "16px",
               color: "#111111",
               cursor: "pointer",
             }}
@@ -221,13 +267,14 @@ function DriverList() {
             }
             style={{
               flex: 1,
-              height: "50px",
-              padding: "0 18px",
-              backgroundColor: "#76AFF1",
+              height: "46px",
+              padding: "0 16px",
+              backgroundColor:
+                "#76AFF1",
               border: "none",
               borderRadius: "5px",
               outline: "none",
-              fontSize: "18px",
+              fontSize: "16px",
               color: "#111111",
             }}
           />
@@ -238,20 +285,20 @@ function DriverList() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "20px",
+            gap: "18px",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
+              gap: "8px",
             }}
           >
             <span
               style={{
                 color: "white",
-                fontSize: "18px",
+                fontSize: "16px",
                 fontWeight: "500",
               }}
             >
@@ -266,13 +313,14 @@ function DriverList() {
                 )
               }
               style={{
-                height: "50px",
-                padding: "0 15px",
-                backgroundColor: "#76AFF1",
+                height: "46px",
+                padding: "0 14px",
+                backgroundColor:
+                  "#76AFF1",
                 border: "none",
                 borderRadius: "5px",
                 outline: "none",
-                fontSize: "18px",
+                fontSize: "16px",
                 color: "#111111",
                 cursor: "pointer",
               }}
@@ -293,10 +341,12 @@ function DriverList() {
 
           <PrimaryButton
             text="ADD DRIVER"
-            width="180px"
-            height="50px"
+            width="170px"
+            height="48px"
             onClick={() =>
-              navigate("/driver-add")
+              navigate(
+                "/driver-add"
+              )
             }
           />
         </div>
@@ -305,14 +355,22 @@ function DriverList() {
       {/* Driver Table */}
       <div
         style={{
-          padding: "35px 50px",
+          padding: "30px 50px",
         }}
       >
         <DataTable
           columns={columns}
           data={filteredDrivers}
-          renderCell={(key, value, row) => {
-            if (key === "profile") {
+          headerFontSize="26px"
+          cellFontSize="21px"
+          renderCell={(
+            key,
+            value,
+            row
+          ) => {
+            if (
+              key === "profile"
+            ) {
               return (
                 <span
                   onClick={() =>
@@ -324,11 +382,15 @@ function DriverList() {
                     )
                   }
                   style={{
-                    cursor: "pointer",
+                    cursor:
+                      "pointer",
                     color: "white",
                     textDecoration:
                       "underline",
-                    fontWeight: "500",
+                    fontWeight:
+                      "500",
+                    fontSize:
+                      "20px",
                   }}
                 >
                   View Profile

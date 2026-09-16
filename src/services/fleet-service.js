@@ -6,7 +6,10 @@ export async function getFleets() {
     .select("*");
 
   if (fleetsError) {
-    console.error("Error fetching fleets:", fleetsError.message);
+    console.error(
+      "Error fetching fleets:",
+      fleetsError.message
+    );
     throw fleetsError;
   }
 
@@ -15,12 +18,18 @@ export async function getFleets() {
     .select("*");
 
   if (driversError) {
-    console.error("Error fetching drivers:", driversError.message);
+    console.error(
+      "Error fetching drivers:",
+      driversError.message
+    );
     throw driversError;
   }
 
   const driverMap = new Map(
-    drivers.map((driver) => [driver.id, driver])
+    drivers.map((driver) => [
+      driver.id,
+      driver,
+    ])
   );
 
   return fleets.map((fleet) => ({
@@ -32,11 +41,12 @@ export async function getFleets() {
 }
 
 export async function getFleetLiveLocation(fleetId) {
-  const { data: fleet, error: fleetError } = await supabase
-    .from("fleets")
-    .select("*")
-    .eq("id", fleetId)
-    .single();
+  const { data: fleet, error: fleetError } =
+    await supabase
+      .from("fleets")
+      .select("*")
+      .eq("id", fleetId)
+      .single();
 
   if (fleetError) {
     console.error(
@@ -49,11 +59,12 @@ export async function getFleetLiveLocation(fleetId) {
   let driver = null;
 
   if (fleet.driver_id) {
-    const { data: driverData, error: driverError } = await supabase
-      .from("drivers")
-      .select("*")
-      .eq("id", fleet.driver_id)
-      .single();
+    const { data: driverData, error: driverError } =
+      await supabase
+        .from("drivers")
+        .select("*")
+        .eq("id", fleet.driver_id)
+        .single();
 
     if (driverError) {
       console.error(
@@ -72,12 +83,28 @@ export async function getFleetLiveLocation(fleetId) {
   };
 }
 
-export async function getAvailableDrivers() {
-  const { data, error } = await supabase
-    .from("drivers")
-    .select("*")
-    .is("fleet_id", null)
-    .order("name", { ascending: true });
+/*
+ * Get drivers that can be selected for a fleet.
+ *
+ * Add Fleet:
+ *   - Only unassigned drivers are returned.
+ *
+ * Update Fleet:
+ *   - Unassigned drivers are returned.
+ *   - The current fleet's assigned driver is also returned.
+ *   - Drivers assigned to other fleets are excluded.
+ */
+export async function getAvailableDrivers(
+  currentDriverId = null
+) {
+  const { data: availableDrivers, error } =
+    await supabase
+      .from("drivers")
+      .select("*")
+      .is("fleet_id", null)
+      .order("name", {
+        ascending: true,
+      });
 
   if (error) {
     console.error(
@@ -87,11 +114,66 @@ export async function getAvailableDrivers() {
     throw error;
   }
 
-  return data;
+  /*
+   * Add Fleet does not have a current driver.
+   * Therefore, just return unassigned drivers.
+   */
+  if (!currentDriverId) {
+    return availableDrivers;
+  }
+
+  /*
+   * Update Fleet:
+   * Fetch the driver currently assigned to
+   * this fleet and add them to the list.
+   */
+  const {
+    data: currentDriver,
+    error: currentDriverError,
+  } = await supabase
+    .from("drivers")
+    .select("*")
+    .eq("id", currentDriverId)
+    .single();
+
+  if (currentDriverError) {
+    console.error(
+      "Error fetching current fleet driver:",
+      currentDriverError.message
+    );
+    throw currentDriverError;
+  }
+
+  /*
+   * Avoid duplicate entry in case the current driver
+   * is somehow already returned as unassigned.
+   */
+  const driverExists = availableDrivers.some(
+    (driver) =>
+      driver.id === currentDriver.id
+  );
+
+  if (!driverExists) {
+    availableDrivers.push(currentDriver);
+  }
+
+  /*
+   * Keep the dropdown alphabetically sorted.
+   */
+  availableDrivers.sort((a, b) =>
+    (a.name || "").localeCompare(
+      b.name || ""
+    )
+  );
+
+  return availableDrivers;
 }
 
 export async function createFleet(fleetData) {
-  const { data: driver, error: driverError } = await supabase
+  const {
+    data: driver,
+    error: driverError,
+  } = await supabase
     .from("drivers")
     .select("id, fleet_id")
     .eq("id", fleetData.driver_id)
@@ -111,21 +193,20 @@ export async function createFleet(fleetData) {
     );
   }
 
-  const { data: fleet, error: fleetError } = await supabase
+  const {
+    data: fleet,
+    error: fleetError,
+  } = await supabase
     .from("fleets")
     .insert({
       fleet_name: fleetData.fleet_name,
       vehicle_number: fleetData.vehicle_number,
       driver_id: fleetData.driver_id,
-
-      // Every fleet created from this page is Active.
       status: "Active",
-
-      start: fleetData.start?.trim() || null,
-      destination: fleetData.destination?.trim() || null,
-
-      // Coordinates are kept for live location.
-      // They are initially empty until location data is available.
+      start:
+        fleetData.start?.trim() || null,
+      destination:
+        fleetData.destination?.trim() || null,
       latitude: null,
       longitude: null,
     })
@@ -133,11 +214,16 @@ export async function createFleet(fleetData) {
     .single();
 
   if (fleetError) {
-    console.error("Error creating fleet:", fleetError.message);
+    console.error(
+      "Error creating fleet:",
+      fleetError.message
+    );
     throw fleetError;
   }
 
-  const { error: driverUpdateError } = await supabase
+  const {
+    error: driverUpdateError,
+  } = await supabase
     .from("drivers")
     .update({
       fleet_id: fleet.id,
@@ -162,14 +248,18 @@ export async function createFleet(fleetData) {
   return fleet;
 }
 
-export async function updateFleet(fleetId, fleetData) {
-  // Get the existing fleet first.
-  const { data: existingFleet, error: existingFleetError } =
-    await supabase
-      .from("fleets")
-      .select("*")
-      .eq("id", fleetId)
-      .single();
+export async function updateFleet(
+  fleetId,
+  fleetData
+) {
+  const {
+    data: existingFleet,
+    error: existingFleetError,
+  } = await supabase
+    .from("fleets")
+    .select("*")
+    .eq("id", fleetId)
+    .single();
 
   if (existingFleetError) {
     console.error(
@@ -179,11 +269,17 @@ export async function updateFleet(fleetId, fleetData) {
     throw existingFleetError;
   }
 
-  const oldDriverId = existingFleet.driver_id;
-  const newDriverId = fleetData.driver_id;
+  const oldDriverId =
+    existingFleet.driver_id;
 
-  // If the driver is being changed, make sure the new driver
-  // exists and is not already assigned to another fleet.
+  const newDriverId =
+    fleetData.driver_id;
+
+  /*
+   * If the driver is being changed,
+   * make sure the new driver is not
+   * assigned to another fleet.
+   */
   if (newDriverId !== oldDriverId) {
     if (!newDriverId) {
       throw new Error(
@@ -191,12 +287,14 @@ export async function updateFleet(fleetId, fleetData) {
       );
     }
 
-    const { data: newDriver, error: newDriverError } =
-      await supabase
-        .from("drivers")
-        .select("id, fleet_id")
-        .eq("id", newDriverId)
-        .single();
+    const {
+      data: newDriver,
+      error: newDriverError,
+    } = await supabase
+      .from("drivers")
+      .select("id, fleet_id")
+      .eq("id", newDriverId)
+      .single();
 
     if (newDriverError) {
       console.error(
@@ -216,29 +314,38 @@ export async function updateFleet(fleetId, fleetData) {
     }
   }
 
-  // Update only the editable fleet information.
-  //
-  // IMPORTANT:
-  // latitude and longitude are intentionally NOT included here.
-  // They belong to the live-location system and should not be
-  // overwritten when editing the fleet.
-  const { data: updatedFleet, error: fleetUpdateError } =
-    await supabase
-      .from("fleets")
-      .update({
-        fleet_name: fleetData.fleet_name,
-        vehicle_number: fleetData.vehicle_number,
-        driver_id: newDriverId,
+  /*
+   * Update fleet information.
+   *
+   * Latitude and longitude are intentionally
+   * NOT changed here.
+   */
+  const {
+    data: updatedFleet,
+    error: fleetUpdateError,
+  } = await supabase
+    .from("fleets")
+    .update({
+      fleet_name:
+        fleetData.fleet_name,
 
-        // Fleet list contains active fleets only.
-        status: "Active",
+      vehicle_number:
+        fleetData.vehicle_number,
 
-        start: fleetData.start?.trim() || null,
-        destination: fleetData.destination?.trim() || null,
-      })
-      .eq("id", fleetId)
-      .select("*")
-      .single();
+      driver_id:
+        newDriverId,
+
+      status: "Active",
+
+      start:
+        fleetData.start?.trim() || null,
+
+      destination:
+        fleetData.destination?.trim() || null,
+    })
+    .eq("id", fleetId)
+    .select("*")
+    .single();
 
   if (fleetUpdateError) {
     console.error(
@@ -248,9 +355,17 @@ export async function updateFleet(fleetId, fleetData) {
     throw fleetUpdateError;
   }
 
-  // If the driver changed, clear the old driver's fleet assignment.
-  if (oldDriverId && oldDriverId !== newDriverId) {
-    const { error: oldDriverUpdateError } = await supabase
+  /*
+   * Remove the old driver from the fleet
+   * when the driver is changed.
+   */
+  if (
+    oldDriverId &&
+    oldDriverId !== newDriverId
+  ) {
+    const {
+      error: oldDriverUpdateError,
+    } = await supabase
       .from("drivers")
       .update({
         fleet_id: null,
@@ -267,9 +382,13 @@ export async function updateFleet(fleetId, fleetData) {
     }
   }
 
-  // Make sure the new driver's fleet_id points to this fleet.
+  /*
+   * Assign the new driver to this fleet.
+   */
   if (newDriverId) {
-    const { error: newDriverUpdateError } = await supabase
+    const {
+      error: newDriverUpdateError,
+    } = await supabase
       .from("drivers")
       .update({
         fleet_id: fleetId,
@@ -289,9 +408,13 @@ export async function updateFleet(fleetId, fleetData) {
   return updatedFleet;
 }
 
-export async function deleteFleet(fleetId) {
-  // Get the fleet so we know which driver needs to be unassigned.
-  const { data: fleet, error: fleetError } = await supabase
+export async function deleteFleet(
+  fleetId
+) {
+  const {
+    data: fleet,
+    error: fleetError,
+  } = await supabase
     .from("fleets")
     .select("id, driver_id")
     .eq("id", fleetId)
@@ -305,9 +428,10 @@ export async function deleteFleet(fleetId) {
     throw fleetError;
   }
 
-  // Clear the driver's fleet assignment first.
   if (fleet.driver_id) {
-    const { error: driverUpdateError } = await supabase
+    const {
+      error: driverUpdateError,
+    } = await supabase
       .from("drivers")
       .update({
         fleet_id: null,
@@ -324,8 +448,10 @@ export async function deleteFleet(fleetId) {
     }
   }
 
-  // Now delete the fleet.
-  const { data, error } = await supabase
+  const {
+    data,
+    error,
+  } = await supabase
     .from("fleets")
     .delete()
     .eq("id", fleetId)
@@ -333,7 +459,10 @@ export async function deleteFleet(fleetId) {
     .single();
 
   if (error) {
-    console.error("Error deleting fleet:", error.message);
+    console.error(
+      "Error deleting fleet:",
+      error.message
+    );
     throw error;
   }
 
