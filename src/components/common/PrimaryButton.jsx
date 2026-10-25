@@ -1,10 +1,11 @@
+
 function PrimaryButton({
   text,
   onClick,
   type = "button",
   width = "280px",
   height = "70px",
-  backgroundColor = "#3B82F6",
+  backgroundColor = "#2563EB",
   textColor = "#FFFFFF",
   disabled = false,
 }) {
@@ -17,24 +18,33 @@ function PrimaryButton({
         width,
         height,
         minWidth: 0,
+        maxWidth: "100%",
         boxSizing: "border-box",
-        padding: "0 14px",
-        backgroundColor,
-        color: textColor,
-        border: "none",
-        borderRadius: "20px",
+        padding: "0 20px",
+        backgroundColor: disabled
+          ? "#334155"
+          : backgroundColor,
+        color: disabled
+          ? "#CBD5E1"
+          : textColor,
+        border: "1px solid rgba(125,211,252,0.25)",
+        borderRadius: "10px",
         cursor: disabled
           ? "not-allowed"
           : "pointer",
-        fontSize: "22px",
-        fontWeight: "600",
-        lineHeight: "1.1",
+        fontFamily: "inherit",
+        fontSize: "17px",
+        fontWeight: "650",
+        lineHeight: "1.2",
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        boxShadow:
-          "0px 4px 6px rgba(0,0,0,0.35)",
-        opacity: disabled ? 0.7 : 1,
+        boxShadow: disabled
+          ? "none"
+          : "0 4px 12px rgba(0,0,0,0.22)",
+        opacity: disabled ? 0.75 : 1,
+        transition:
+          "background-color 0.2s ease, box-shadow 0.2s ease",
       }}
     >
       {text}

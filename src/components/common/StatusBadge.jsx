@@ -1,25 +1,25 @@
 function StatusBadge({ status }) {
-  let color = "#000000";
+  let color = "#94A3B8";
 
   switch (status.toLowerCase()) {
     case "active":
-      color = "#00D000";
+      color = "#2DD4BF";
       break;
 
     case "not responding":
-      color = "#FF3131";
+      color = "#FB7185";
       break;
 
     case "inactive":
-      color = "#FFD447";
+      color = "#FBBF24";
       break;
 
     case "critical":
-      color = "#FF3131";
+      color = "#FDA4AF";
       break;
 
     default:
-      color = "#FFFFFF";
+      color = "#CBD5E1";
   }
 
   return (

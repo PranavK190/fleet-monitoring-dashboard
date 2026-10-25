@@ -51,7 +51,8 @@ function Alert() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -76,7 +77,7 @@ function Alert() {
         >
           <h1
             style={{
-              color: resolved ? "#39E600" : "#FF3B30",
+              color: resolved ? "#2DD4BF" : "#FDA4AF",
               fontSize: "42px",
               marginBottom: "80px",
               lineHeight: "1.2",
@@ -100,8 +101,8 @@ function Alert() {
           >
             <PrimaryButton
               text={resolved ? "ALREADY RESOLVED" : "MARK AS RESOLVED"}
-              backgroundColor="#39E600"
-              textColor="black"
+              backgroundColor="#2DD4BF"
+              textColor="#0B1220"
               width="350px"
               height="65px"
               onClick={handleResolve}
@@ -109,8 +110,8 @@ function Alert() {
 
             <PrimaryButton
               text="ESCALATE"
-              backgroundColor="#FFD84D"
-              textColor="black"
+              backgroundColor="#FBBF24"
+              textColor="#0B1220"
               width="350px"
               height="65px"
               onClick={() => alert("Escalation functionality pending")}
@@ -118,8 +119,8 @@ function Alert() {
 
             <PrimaryButton
               text="CONTACT EMERGENCY TEAM"
-              backgroundColor="#FF2B1F"
-              textColor="black"
+              backgroundColor="#FB7185"
+              textColor="#0B1220"
               width="350px"
               height="65px"
               onClick={() =>

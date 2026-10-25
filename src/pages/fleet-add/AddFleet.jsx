@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -122,7 +123,9 @@ function AddFleet() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -296,9 +299,11 @@ const fieldContainerStyle = {
   display: "flex",
   width: "100%",
   height: "56px",
-  backgroundColor: "#76AFF1",
+  backgroundColor: "#111B2E",
+  border: "1px solid #334863",
   borderRadius: "2px",
   overflow: "hidden",
+  boxSizing: "border-box",
 };
 
 const labelStyle = {
@@ -306,27 +311,28 @@ const labelStyle = {
   display: "flex",
   alignItems: "center",
   paddingLeft: "16px",
-  borderRight:
-    "1px solid rgba(0,0,0,0.35)",
+  borderRight: "1px solid #334863",
   fontSize: "22px",
   fontWeight: "500",
-  color: "#111111",
+  color: "#CBD5E1",
   textTransform: "uppercase",
+  boxSizing: "border-box",
 };
 
 const selectStyle = {
   flex: 1,
+  minWidth: 0,
   border: "none",
   outline: "none",
-  backgroundColor: "#76AFF1",
+  backgroundColor: "#1A2940",
   padding: "0 16px",
   fontSize: "20px",
-  color: "#111111",
+  color: "#F8FAFC",
 };
 
 const errorStyle = {
   margin: "-15px 0 0 10px",
-  color: "#FF6B6B",
+  color: "#FDA4AF",
   fontSize: "16px",
 };
 

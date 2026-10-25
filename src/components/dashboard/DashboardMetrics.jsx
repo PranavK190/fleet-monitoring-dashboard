@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { getDashboardMetrics } from "../../services/dashboard-service";
+import {
+  getDashboardMetrics,
+} from "../../services/dashboard-service";
 
 import MetricCard from "../common/MetricCard";
 
@@ -16,9 +18,6 @@ function DashboardMetrics() {
     async function loadMetrics() {
       try {
         const data = await getDashboardMetrics();
-
-        console.log("Dashboard metrics:", data);
-
         setMetrics(data);
       } catch (error) {
         console.error(
@@ -32,58 +31,79 @@ function DashboardMetrics() {
   }, []);
 
   return (
-    <div
+    <section
+      aria-label="Fleet overview metrics"
       style={{
         width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        gap: "60px",
-        alignItems: "center",
+        minWidth: 0,
       }}
     >
-      {/* Top Row */}
       <div
         style={{
+          marginBottom: "28px",
+        }}
+      >
+        <h2
+          style={{
+            margin: 0,
+            color: "#F8FAFC",
+            fontSize: "clamp(21px, 2vw, 27px)",
+            fontWeight: "700",
+            letterSpacing: "-0.3px",
+          }}
+        >
+          Fleet Overview
+        </h2>
+
+        <p
+          style={{
+            margin: "8px 0 0",
+            color: "#94A3B8",
+            fontSize: "14px",
+            lineHeight: 1.5,
+          }}
+        >
+          A quick overview of your fleet operations.
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit, minmax(min(100%, 230px), 1fr))",
+          gap: "24px",
           width: "100%",
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          gap: "30px",
+          minWidth: 0,
+          alignItems: "stretch",
         }}
       >
         <MetricCard
           title="Total Fleet"
           value={`${metrics.totalFleet} Fleets`}
+          accentColor="#38BDF8"
         />
 
         <MetricCard
           title="Total Drivers"
           value={`${metrics.totalDrivers} Drivers`}
+          accentColor="#818CF8"
         />
-      </div>
 
-      {/* Bottom Row */}
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          gap: "30px",
-        }}
-      >
         <MetricCard
           title="Active Drivers"
           value={`${metrics.activeDrivers} Drivers`}
+          accentColor="#2DD4BF"
         />
 
         <MetricCard
           title="Alerts"
           value={metrics.alerts}
-          valueColor="red"
+          accentColor="#FB7185"
+          valueColor="#FDA4AF"
         />
       </div>
-    </div>
+    </section>
   );
 }
 

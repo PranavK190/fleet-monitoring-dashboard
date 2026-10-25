@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -127,7 +128,9 @@ function Fleet() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -139,7 +142,8 @@ function Fleet() {
 
       <div
         style={{
-          padding: "35px 50px",
+          padding: "clamp(20px, 3vw, 42px)",
+          boxSizing: "border-box",
         }}
       >
         <div
@@ -148,12 +152,25 @@ function Fleet() {
             justifyContent:
               "space-between",
             alignItems: "center",
+            flexWrap: "wrap",
             gap: "20px",
+            padding: "18px",
+            backgroundColor: "#111B2E",
+            border: "1px solid #26364D",
+            borderRadius: "12px",
           }}
         >
-          <SearchBar
-            placeholder="Search Fleet..."
-          />
+          <div
+            style={{
+              flex: "1 1 260px",
+              minWidth: 0,
+              maxWidth: "440px",
+            }}
+          >
+            <SearchBar
+              placeholder="Search Fleet..."
+            />
+          </div>
 
           <PrimaryButton
             text="ADD FLEET"
@@ -167,7 +184,14 @@ function Fleet() {
 
         <div
           style={{
-            marginTop: "35px",
+            marginTop: "28px",
+            width: "100%",
+            overflowX: "auto",
+            backgroundColor: "#111B2E",
+            border: "1px solid #26364D",
+            borderRadius: "12px",
+            boxShadow:
+              "0 8px 24px rgba(0,0,0,0.15)",
           }}
         >
           <DataTable
@@ -208,11 +232,13 @@ function Fleet() {
                       cursor:
                         "pointer",
                       color:
-                        "white",
+                        "#7DD3FC",
                       textDecoration:
                         "underline",
+                      textUnderlineOffset:
+                        "4px",
                       fontWeight:
-                        "500",
+                        "600",
                       fontSize:
                         "20px",
                     }}

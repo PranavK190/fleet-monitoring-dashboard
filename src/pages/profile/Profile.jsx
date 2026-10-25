@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -69,12 +70,13 @@ function Profile() {
       <div
         style={{
           minHeight: "100vh",
-          backgroundColor: "#14004D",
-          color: "white",
+          backgroundColor: "#0B1220",
+          color: "#F8FAFC",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           fontSize: "22px",
+          fontFamily: "Inter, Arial, sans-serif",
         }}
       >
         Loading profile...
@@ -86,7 +88,9 @@ function Profile() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -97,8 +101,7 @@ function Profile() {
       <div
         style={{
           display: "flex",
-          justifyContent:
-            "space-between",
+          justifyContent: "space-between",
           gap: "70px",
           padding: "45px",
         }}
@@ -118,12 +121,13 @@ function Profile() {
               width: "170px",
               height: "170px",
               borderRadius: "50%",
-              border: "10px solid white",
+              border: "10px solid #26364D",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               fontSize: "85px",
-              color: "white",
+              color: "#F8FAFC",
+              backgroundColor: "#111B2E",
             }}
           >
             👤
@@ -185,8 +189,7 @@ function Profile() {
           <div
             style={{
               display: "flex",
-              justifyContent:
-                "center",
+              justifyContent: "center",
               gap: "35px",
               marginTop: "25px",
             }}

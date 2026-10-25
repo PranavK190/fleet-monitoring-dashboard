@@ -7,13 +7,13 @@ function VideoPlaceholder({
       style={{
         width,
         height,
-        backgroundColor: "#000000",
-        border: "3px solid #8DBEFF",
+        backgroundColor: "#111B2E",
+        border: "3px solid #38BDF8",
         borderRadius: "12px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        color: "#8DBEFF",
+        color: "#7DD3FC",
         fontSize: "28px",
         fontWeight: "600",
       }}

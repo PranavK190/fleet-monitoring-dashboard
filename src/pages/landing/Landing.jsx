@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../components/common/PrimaryButton";
 
@@ -8,18 +9,20 @@ function Landing() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         gap: "40px",
         padding: "40px",
+        boxSizing: "border-box",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <h1
         style={{
-          color: "#FFFFFF",
+          color: "#F8FAFC",
           fontSize: "64px",
           margin: 0,
           textAlign: "center",
@@ -30,11 +33,12 @@ function Landing() {
 
       <p
         style={{
-          color: "#D8D8D8",
+          color: "#CBD5E1",
           fontSize: "24px",
           textAlign: "center",
           maxWidth: "700px",
           margin: 0,
+          lineHeight: 1.6,
         }}
       >
         Monitor your fleet, drivers, alerts, and live vehicle status from a
@@ -44,6 +48,8 @@ function Landing() {
       <div
         style={{
           display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
           gap: "20px",
           marginTop: "20px",
         }}

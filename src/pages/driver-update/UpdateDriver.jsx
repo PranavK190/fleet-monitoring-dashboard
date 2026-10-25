@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -192,7 +193,9 @@ function UpdateDriver() {
       <div
         style={{
           minHeight: "100vh",
-          backgroundColor: "#14004D",
+          backgroundColor: "#0B1220",
+          color: "#F8FAFC",
+          fontFamily: "Inter, Arial, sans-serif",
         }}
       >
         <PageHeader
@@ -205,7 +208,7 @@ function UpdateDriver() {
 
         <div
           style={{
-            color: "white",
+            color: "#F8FAFC",
             textAlign: "center",
             paddingTop: "100px",
             fontSize: "24px",
@@ -235,7 +238,9 @@ function UpdateDriver() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -272,7 +277,7 @@ function UpdateDriver() {
           {errors.name && (
             <p
               style={{
-                color: "#ff6b6b",
+                color: "#FDA4AF",
                 marginTop: "6px",
               }}
             >
@@ -297,7 +302,7 @@ function UpdateDriver() {
           {errors.age && (
             <p
               style={{
-                color: "#ff6b6b",
+                color: "#FDA4AF",
                 marginTop: "6px",
               }}
             >
@@ -322,7 +327,7 @@ function UpdateDriver() {
           {errors.contact && (
             <p
               style={{
-                color: "#ff6b6b",
+                color: "#FDA4AF",
                 marginTop: "6px",
               }}
             >
@@ -347,7 +352,7 @@ function UpdateDriver() {
           {errors.employeeId && (
             <p
               style={{
-                color: "#ff6b6b",
+                color: "#FDA4AF",
                 marginTop: "6px",
               }}
             >
@@ -360,7 +365,7 @@ function UpdateDriver() {
         {errors.submit && (
           <p
             style={{
-              color: "#ff6b6b",
+              color: "#FDA4AF",
               textAlign: "center",
             }}
           >

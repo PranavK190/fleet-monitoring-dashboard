@@ -1,3 +1,4 @@
+
 function SearchBar({
   placeholder = "Search",
   value,
@@ -8,19 +9,26 @@ function SearchBar({
     <div
       style={{
         width,
+        maxWidth: "100%",
+        minWidth: 0,
         height: "52px",
-        backgroundColor: "#8DBEFF",
-        borderRadius: "25px",
+        boxSizing: "border-box",
+        backgroundColor: "#1A2940",
+        border: "1px solid #3B506B",
+        borderRadius: "10px",
         display: "flex",
         alignItems: "center",
-        padding: "0 18px",
+        padding: "0 16px",
         gap: "12px",
+        transition: "border-color 0.2s ease",
       }}
     >
       <span
+        aria-hidden="true"
         style={{
-          fontSize: "28px",
-          color: "#2E2E2E",
+          fontSize: "21px",
+          color: "#38BDF8",
+          flexShrink: 0,
         }}
       >
         🔍
@@ -33,13 +41,26 @@ function SearchBar({
         placeholder={placeholder}
         style={{
           flex: 1,
+          minWidth: 0,
+          height: "100%",
+          boxSizing: "border-box",
           border: "none",
           outline: "none",
           background: "transparent",
-          fontSize: "22px",
-          color: "#ffffff",
+          fontFamily: "inherit",
+          fontSize: "16px",
+          color: "#F8FAFC",
         }}
       />
+
+      <style>
+        {`
+          input::placeholder {
+            color: #94A3B8;
+            opacity: 1;
+          }
+        `}
+      </style>
     </div>
   );
 }

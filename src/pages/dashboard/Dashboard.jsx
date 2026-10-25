@@ -7,36 +7,42 @@ function Dashboard() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <DashboardHeader />
 
       <div
         style={{
-          display: "flex",
-          minHeight: "calc(100vh - 160px)",
+          display: "grid",
+          gridTemplateColumns: "minmax(230px, 270px) minmax(0, 1fr)",
+          minHeight: "calc(100vh - 120px)",
         }}
       >
         {/* Sidebar */}
-        <div
+        <aside
           style={{
-            width: "320px",
-            borderRight: "1px solid rgba(255,255,255,0.25)",
+            backgroundColor: "#111B2E",
+            borderRight: "1px solid #26364D",
+            minWidth: 0,
           }}
         >
           <DashboardSidebar />
-        </div>
+        </aside>
 
         {/* Main Content */}
-        <div
+        <main
           style={{
-            flex: 1,
-            padding: "40px",
+            minWidth: 0,
+            padding: "clamp(20px, 3vw, 42px)",
+            boxSizing: "border-box",
+            backgroundColor: "#0B1220",
           }}
         >
           <DashboardMetrics />
-        </div>
+        </main>
       </div>
     </div>
   );

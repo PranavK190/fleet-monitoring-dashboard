@@ -9,11 +9,11 @@ function Avatar({
         height: size,
         borderRadius: "50%",
         overflow: "hidden",
-        backgroundColor: "#E8E1F2",
+        backgroundColor: "#111B2E",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        border: "8px solid #E8E1F2",
+        border: "8px solid #334863",
       }}
     >
       {image ? (
@@ -31,7 +31,7 @@ function Avatar({
           width="80%"
           height="80%"
           viewBox="0 0 24 24"
-          fill="#14004D"
+          fill="#38BDF8"
         >
           <path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z"/>
         </svg>

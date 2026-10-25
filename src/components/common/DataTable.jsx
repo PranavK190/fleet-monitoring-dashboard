@@ -10,7 +10,7 @@ function DataTable({
       style={{
         width: "100%",
         borderCollapse: "collapse",
-        color: "white",
+        color: "#F8FAFC",
       }}
     >
       <thead>
@@ -22,11 +22,13 @@ function DataTable({
                 padding: "20px",
                 fontSize: headerFontSize,
                 fontWeight: "600",
+                backgroundColor: "#111B2E",
                 borderBottom:
-                  "2px solid rgba(255,255,255,0.3)",
+                  "2px solid #334863",
                 borderRight:
-                  "1px solid rgba(255,255,255,0.2)",
+                  "1px solid #26364D",
                 textAlign: "center",
+                color: "#7DD3FC",
               }}
             >
               {column.label}
@@ -45,8 +47,12 @@ function DataTable({
                   padding: "22px",
                   fontSize: cellFontSize,
                   textAlign: "center",
+                  backgroundColor: "#142238",
                   borderRight:
-                    "1px solid rgba(255,255,255,0.15)",
+                    "1px solid #26364D",
+                  borderBottom:
+                    "1px solid #26364D",
+                  color: "#F8FAFC",
                 }}
               >
                 {renderCell

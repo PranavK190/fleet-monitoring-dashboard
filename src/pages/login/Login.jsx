@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -52,8 +53,9 @@ function Login() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
-        color: "white",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -67,6 +69,7 @@ function Login() {
           flexDirection: "column",
           alignItems: "center",
           marginTop: "30px",
+          padding: "0 24px 40px",
         }}
       >
         <h1
@@ -74,6 +77,8 @@ function Login() {
             fontSize: "52px",
             marginBottom: "70px",
             fontWeight: "700",
+            color: "#F8FAFC",
+            textAlign: "center",
           }}
         >
           LOGIN
@@ -81,7 +86,8 @@ function Login() {
 
         <div
           style={{
-            width: "720px",
+            width: "100%",
+            maxWidth: "720px",
             display: "flex",
             flexDirection: "column",
             gap: "35px",
@@ -112,7 +118,7 @@ function Login() {
                 bottom: "8px",
                 background: "none",
                 border: "none",
-                color: "white",
+                color: "#F8FAFC",
                 cursor: "pointer",
                 fontSize: "20px",
                 padding: "0",
@@ -125,7 +131,7 @@ function Login() {
           {errorMessage && (
             <p
               style={{
-                color: "#FF4D4D",
+                color: "#FDA4AF",
                 margin: 0,
                 fontSize: "18px",
                 textAlign: "center",
@@ -138,10 +144,13 @@ function Login() {
 
         <div
           style={{
-            width: "720px",
+            width: "100%",
+            maxWidth: "720px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            flexWrap: "wrap",
+            gap: "20px",
             marginTop: "50px",
           }}
         >
@@ -150,7 +159,7 @@ function Login() {
             style={{
               background: "none",
               border: "none",
-              color: "white",
+              color: "#7DD3FC",
               textDecoration: "underline",
               cursor: "pointer",
               fontSize: "17px",

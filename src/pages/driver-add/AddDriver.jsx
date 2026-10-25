@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -94,11 +95,21 @@ function AddDriver() {
     }
   }
 
+  const errorStyle = {
+    color: "#FDA4AF",
+    marginTop: "6px",
+    marginBottom: 0,
+    fontSize: "14px",
+    lineHeight: "1.5",
+  };
+
   return (
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -111,10 +122,11 @@ function AddDriver() {
         style={{
           maxWidth: "700px",
           margin: "0 auto",
-          padding: "60px 50px",
+          padding: "clamp(30px, 5vw, 60px) clamp(20px, 5vw, 50px)",
           display: "flex",
           flexDirection: "column",
           gap: "25px",
+          boxSizing: "border-box",
         }}
       >
         <div>
@@ -128,12 +140,7 @@ function AddDriver() {
           />
 
           {errors.name && (
-            <p
-              style={{
-                color: "#ff6b6b",
-                marginTop: "6px",
-              }}
-            >
+            <p style={errorStyle}>
               {errors.name}
             </p>
           )}
@@ -150,12 +157,7 @@ function AddDriver() {
           />
 
           {errors.age && (
-            <p
-              style={{
-                color: "#ff6b6b",
-                marginTop: "6px",
-              }}
-            >
+            <p style={errorStyle}>
               {errors.age}
             </p>
           )}
@@ -172,12 +174,7 @@ function AddDriver() {
           />
 
           {errors.contact && (
-            <p
-              style={{
-                color: "#ff6b6b",
-                marginTop: "6px",
-              }}
-            >
+            <p style={errorStyle}>
               {errors.contact}
             </p>
           )}
@@ -186,8 +183,14 @@ function AddDriver() {
         {errors.submit && (
           <p
             style={{
-              color: "#ff6b6b",
+              color: "#FDA4AF",
               textAlign: "center",
+              backgroundColor: "#2A1725",
+              border: "1px solid #7F3047",
+              borderRadius: "8px",
+              padding: "12px",
+              margin: 0,
+              overflowWrap: "anywhere",
             }}
           >
             {errors.submit}
@@ -198,8 +201,9 @@ function AddDriver() {
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: "30px",
+            gap: "20px",
             marginTop: "20px",
+            flexWrap: "wrap",
           }}
         >
           <PrimaryButton

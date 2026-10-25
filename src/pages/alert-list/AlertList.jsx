@@ -93,7 +93,9 @@ function AlertList() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -104,52 +106,74 @@ function AlertList() {
 
       <div
         style={{
-          padding: "35px 50px",
+          padding: "28px clamp(20px, 3vw, 42px)",
+          boxSizing: "border-box",
+          width: "100%",
         }}
       >
+        {/* Search */}
         <div
           style={{
             width: "420px",
-            marginBottom: "35px",
+            maxWidth: "100%",
+            marginBottom: "28px",
+            padding: "16px",
+            boxSizing: "border-box",
+            backgroundColor: "#111B2E",
+            border: "1px solid #26364D",
+            borderRadius: "12px",
           }}
         >
           <SearchBar placeholder="Search" />
         </div>
 
-        <DataTable
-          columns={columns}
-          data={alerts}
-          headerFontSize="26px"
-          cellFontSize="21px"
-          renderCell={(key, value, row) => {
-            if (key === "action") {
-              return (
-                <span
-                  onClick={() =>
-                    navigate("/alert", {
-                      state: row,
-                    })
-                  }
-                  style={{
-                    cursor: "pointer",
-                    color: "white",
-                    textDecoration:
-                      "underline",
-                    fontWeight: "500",
-                    fontSize: "21px",
-                  }}
-                >
-                  View Action
-                </span>
-              );
-            }
-
-            return value;
+        {/* Alert Table */}
+        <div
+          style={{
+            width: "100%",
+            overflowX: "auto",
+            backgroundColor: "#111B2E",
+            border: "1px solid #26364D",
+            borderRadius: "12px",
+            boxShadow:
+              "0 8px 24px rgba(0,0,0,0.15)",
           }}
-        />
+        >
+          <DataTable
+            columns={columns}
+            data={alerts}
+            headerFontSize="26px"
+            cellFontSize="21px"
+            renderCell={(key, value, row) => {
+              if (key === "action") {
+                return (
+                  <span
+                    onClick={() =>
+                      navigate("/alert", {
+                        state: row,
+                      })
+                    }
+                    style={{
+                      cursor: "pointer",
+                      color: "#7DD3FC",
+                      textDecoration: "underline",
+                      textUnderlineOffset: "4px",
+                      fontWeight: "500",
+                      fontSize: "21px",
+                    }}
+                  >
+                    View Action
+                  </span>
+                );
+              }
+
+              return value;
+            }}
+          />
+        </div>
       </div>
     </div>
   );
 }
 
-export default AlertList;
+export default AlertList

@@ -156,7 +156,7 @@ function FleetLiveLocation() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
       }}
     >
       <PageHeader
@@ -170,7 +170,7 @@ function FleetLiveLocation() {
       {loading ? (
         <div
           style={{
-            color: "white",
+            color: "#F8FAFC",
             fontSize: "24px",
             textAlign: "center",
             paddingTop: "100px",
@@ -181,7 +181,7 @@ function FleetLiveLocation() {
       ) : !fleetData ? (
         <div
           style={{
-            color: "white",
+            color: "#F8FAFC",
             fontSize: "24px",
             textAlign: "center",
             paddingTop: "100px",
@@ -202,7 +202,8 @@ function FleetLiveLocation() {
               maxWidth: "1050px",
               height: "400px",
               margin: "0 auto 45px",
-              backgroundColor: "#111",
+              backgroundColor: "#111B2E",
+              border: "1px solid #26364D",
               borderRadius: "6px",
               overflow: "hidden",
               display: "flex",
@@ -213,8 +214,8 @@ function FleetLiveLocation() {
             <div
               style={{
                 height: "55px",
-                backgroundColor: "#76AFF1",
-                color: "#111",
+                backgroundColor: "#38BDF8",
+                color: "#0B1220",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -232,12 +233,12 @@ function FleetLiveLocation() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "#111",
+                backgroundColor: "#111B2E",
               }}
             >
               <span
                 style={{
-                  color: "white",
+                  color: "#CBD5E1",
                   fontSize: "22px",
                 }}
               >
@@ -357,7 +358,7 @@ function FleetLiveLocation() {
                   ? "DELETING..."
                   : "DELETE FLEET"
               }
-              backgroundColor="#DC2626"
+              backgroundColor="#FB7185"
               onClick={
                 handleDeleteFleet
               }
@@ -377,14 +378,19 @@ function InfoField({
   return (
     <div
       style={{
-        backgroundColor: "#D8E5F7",
+        backgroundColor: "#1A2940",
+        border: "1px solid #334863",
         borderRadius: "8px",
         padding: "15px 20px",
         fontSize: "22px",
-        color: "#111",
+        color: "#F8FAFC",
       }}
     >
-      <strong>
+      <strong
+        style={{
+          color: "#7DD3FC",
+        }}
+      >
         {label}
       </strong>
 

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -148,8 +149,9 @@ function Signup() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
-        color: "white",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -170,6 +172,7 @@ function Signup() {
             fontSize: "52px",
             fontWeight: "700",
             marginBottom: "50px",
+            color: "#F8FAFC",
           }}
         >
           SIGN UP
@@ -216,6 +219,7 @@ function Signup() {
                   display: "block",
                   fontSize: "14px",
                   marginBottom: "8px",
+                  color: "#CBD5E1",
                 }}
               >
                 COUNTRY
@@ -231,10 +235,9 @@ function Signup() {
                 style={{
                   width: "100%",
                   background: "transparent",
-                  color: "white",
+                  color: "#F8FAFC",
                   border: "none",
-                  borderBottom:
-                    "1px solid white",
+                  borderBottom: "1px solid #334863",
                   padding: "10px 0",
                   fontSize: "18px",
                   outline: "none",
@@ -242,63 +245,49 @@ function Signup() {
               >
                 <option
                   value="+91"
-                  style={{
-                    color: "black",
-                  }}
+                  style={{ color: "#111827" }}
                 >
                   India (+91)
                 </option>
 
                 <option
                   value="+1"
-                  style={{
-                    color: "black",
-                  }}
+                  style={{ color: "#111827" }}
                 >
                   USA / Canada (+1)
                 </option>
 
                 <option
                   value="+44"
-                  style={{
-                    color: "black",
-                  }}
+                  style={{ color: "#111827" }}
                 >
                   UK (+44)
                 </option>
 
                 <option
                   value="+61"
-                  style={{
-                    color: "black",
-                  }}
+                  style={{ color: "#111827" }}
                 >
                   Australia (+61)
                 </option>
 
                 <option
                   value="+49"
-                  style={{
-                    color: "black",
-                  }}
+                  style={{ color: "#111827" }}
                 >
                   Germany (+49)
                 </option>
 
                 <option
                   value="+971"
-                  style={{
-                    color: "black",
-                  }}
+                  style={{ color: "#111827" }}
                 >
                   UAE (+971)
                 </option>
 
                 <option
                   value="+65"
-                  style={{
-                    color: "black",
-                  }}
+                  style={{ color: "#111827" }}
                 >
                   Singapore (+65)
                 </option>
@@ -355,7 +344,7 @@ function Signup() {
                 bottom: "8px",
                 background: "none",
                 border: "none",
-                color: "white",
+                color: "#F8FAFC",
                 cursor: "pointer",
                 fontSize: "20px",
                 padding: "0",
@@ -398,7 +387,7 @@ function Signup() {
                 bottom: "8px",
                 background: "none",
                 border: "none",
-                color: "white",
+                color: "#F8FAFC",
                 cursor: "pointer",
                 fontSize: "20px",
                 padding: "0",
@@ -411,7 +400,7 @@ function Signup() {
           {errorMessage && (
             <p
               style={{
-                color: "#FF4D4D",
+                color: "#FDA4AF",
                 margin: 0,
                 fontSize: "18px",
                 textAlign: "center",
@@ -424,7 +413,7 @@ function Signup() {
           {successMessage && (
             <p
               style={{
-                color: "#39E600",
+                color: "#2DD4BF",
                 margin: 0,
                 fontSize: "18px",
                 textAlign: "center",

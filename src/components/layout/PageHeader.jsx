@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 
 function PageHeader({
@@ -22,16 +23,33 @@ function PageHeader({
     }
   }
 
+  const iconButtonStyle = {
+    background: "transparent",
+    border: "1px solid transparent",
+    color: "#BAE6FD",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "10px",
+    minWidth: "42px",
+    minHeight: "42px",
+    flexShrink: 0,
+  };
+
   return (
-    <div
+    <header
       style={{
-        height: "120px",
-        backgroundColor: "#1B0D83",
-        borderBottom: "2px solid rgba(255,255,255,0.25)",
+        minHeight: "120px",
+        boxSizing: "border-box",
+        background:
+          "linear-gradient(110deg, #111B2E 0%, #152640 100%)",
+        borderBottom: "1px solid #334863",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "0 35px",
+        gap: "20px",
+        padding: "20px clamp(20px, 3vw, 42px)",
       }}
     >
       {/* Left */}
@@ -39,18 +57,18 @@ function PageHeader({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "25px",
+          gap: "18px",
+          minWidth: 0,
         }}
       >
         {showBackButton && (
           <button
+            type="button"
+            aria-label="Go back"
             onClick={handleBack}
             style={{
-              background: "none",
-              border: "none",
-              color: "white",
-              fontSize: "42px",
-              cursor: "pointer",
+              ...iconButtonStyle,
+              fontSize: "36px",
             }}
           >
             ←
@@ -59,13 +77,12 @@ function PageHeader({
 
         {showHomeButton && (
           <button
+            type="button"
+            aria-label="Go to dashboard"
             onClick={() => navigate(homeRoute)}
             style={{
-              background: "none",
-              border: "none",
-              color: "white",
-              fontSize: "40px",
-              cursor: "pointer",
+              ...iconButtonStyle,
+              fontSize: "27px",
             }}
           >
             🏠
@@ -74,9 +91,13 @@ function PageHeader({
 
         <h1
           style={{
-            color: "white",
+            color: "#F8FAFC",
             margin: 0,
-            fontSize: "28px",
+            fontSize: "clamp(22px, 2.2vw, 29px)",
+            fontWeight: "650",
+            letterSpacing: "-0.3px",
+            lineHeight: 1.3,
+            overflowWrap: "anywhere",
           }}
         >
           {title}
@@ -85,19 +106,19 @@ function PageHeader({
 
       {showAlertButton && (
         <button
+          type="button"
+          aria-label="Open alerts"
           onClick={() => navigate(alertRoute)}
           style={{
-            background: "none",
-            border: "none",
-            color: "red",
-            fontSize: "42px",
-            cursor: "pointer",
+            ...iconButtonStyle,
+            color: "#FB7185",
+            fontSize: "32px",
           }}
         >
           ⚠
         </button>
       )}
-    </div>
+    </header>
   );
 }
 

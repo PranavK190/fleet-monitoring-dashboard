@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -68,21 +69,10 @@ function DriverList() {
               driver.employee_id
             ),
 
-            /*
-             * Display human-readable Fleet ID.
-             *
-             * fleet_id remains the internal UUID
-             * and is kept separately for filtering.
-             */
             fleetNo:
               driver.fleet?.fleet_code ||
               "Not Assigned",
 
-            /*
-             * Keep the internal UUID.
-             * This is used only to determine
-             * whether the driver has a fleet.
-             */
             fleetId:
               driver.fleet_id,
 
@@ -112,9 +102,6 @@ function DriverList() {
   const filteredDrivers =
     drivers.filter(
       (driver) => {
-        /*
-         * Search filter
-         */
         const searchValue =
           searchType === "name"
             ? driver.name
@@ -134,15 +121,6 @@ function DriverList() {
           return false;
         }
 
-        /*
-         * Active / Inactive filter
-         *
-         * A driver is ACTIVE when
-         * fleet_id is populated.
-         *
-         * A driver is INACTIVE when
-         * fleet_id is null.
-         */
         const hasFleet =
           driver.fleetId !== null &&
           driver.fleetId !== undefined &&
@@ -193,7 +171,9 @@ function DriverList() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -205,12 +185,13 @@ function DriverList() {
       {/* Controls */}
       <div
         style={{
-          padding: "22px 50px 0",
+          padding: "22px clamp(20px, 3vw, 42px) 0",
           display: "flex",
-          justifyContent:
-            "space-between",
+          justifyContent: "space-between",
           alignItems: "center",
           gap: "22px",
+          flexWrap: "wrap",
+          boxSizing: "border-box",
         }}
       >
         {/* Search */}
@@ -221,6 +202,7 @@ function DriverList() {
             gap: "10px",
             flex: 1,
             maxWidth: "700px",
+            minWidth: 0,
           }}
         >
           <select
@@ -233,13 +215,12 @@ function DriverList() {
             style={{
               height: "46px",
               padding: "0 14px",
-              backgroundColor:
-                "#76AFF1",
-              border: "none",
-              borderRadius: "5px",
+              backgroundColor: "#1A2940",
+              border: "1px solid #3B506B",
+              borderRadius: "9px",
               outline: "none",
               fontSize: "16px",
-              color: "#111111",
+              color: "#F8FAFC",
               cursor: "pointer",
             }}
           >
@@ -267,15 +248,16 @@ function DriverList() {
             }
             style={{
               flex: 1,
+              minWidth: 0,
               height: "46px",
+              boxSizing: "border-box",
               padding: "0 16px",
-              backgroundColor:
-                "#76AFF1",
-              border: "none",
-              borderRadius: "5px",
+              backgroundColor: "#1A2940",
+              border: "1px solid #3B506B",
+              borderRadius: "9px",
               outline: "none",
               fontSize: "16px",
-              color: "#111111",
+              color: "#F8FAFC",
             }}
           />
         </div>
@@ -286,6 +268,7 @@ function DriverList() {
             display: "flex",
             alignItems: "center",
             gap: "18px",
+            flexWrap: "wrap",
           }}
         >
           <div
@@ -297,7 +280,7 @@ function DriverList() {
           >
             <span
               style={{
-                color: "white",
+                color: "#CBD5E1",
                 fontSize: "16px",
                 fontWeight: "500",
               }}
@@ -315,13 +298,12 @@ function DriverList() {
               style={{
                 height: "46px",
                 padding: "0 14px",
-                backgroundColor:
-                  "#76AFF1",
-                border: "none",
-                borderRadius: "5px",
+                backgroundColor: "#1A2940",
+                border: "1px solid #3B506B",
+                borderRadius: "9px",
                 outline: "none",
                 fontSize: "16px",
-                color: "#111111",
+                color: "#F8FAFC",
                 cursor: "pointer",
               }}
             >
@@ -355,52 +337,64 @@ function DriverList() {
       {/* Driver Table */}
       <div
         style={{
-          padding: "30px 50px",
+          padding: "28px clamp(20px, 3vw, 42px)",
+          boxSizing: "border-box",
+          width: "100%",
+          overflowX: "auto",
         }}
       >
-        <DataTable
-          columns={columns}
-          data={filteredDrivers}
-          headerFontSize="26px"
-          cellFontSize="21px"
-          renderCell={(
-            key,
-            value,
-            row
-          ) => {
-            if (
-              key === "profile"
-            ) {
-              return (
-                <span
-                  onClick={() =>
-                    navigate(
-                      "/driver-profile",
-                      {
-                        state: row,
-                      }
-                    )
-                  }
-                  style={{
-                    cursor:
-                      "pointer",
-                    color: "white",
-                    textDecoration:
-                      "underline",
-                    fontWeight:
-                      "500",
-                    fontSize:
-                      "20px",
-                  }}
-                >
-                  View Profile
-                </span>
-              );
-            }
-
-            return value;
+        <div
+          style={{
+            minWidth: "650px",
+            backgroundColor: "#111B2E",
+            border: "1px solid #26364D",
+            borderRadius: "12px",
+            overflow: "hidden",
+            boxShadow:
+              "0 8px 24px rgba(0,0,0,0.15)",
           }}
-        />
+        >
+          <DataTable
+            columns={columns}
+            data={filteredDrivers}
+            headerFontSize="26px"
+            cellFontSize="21px"
+            renderCell={(
+              key,
+              value,
+              row
+            ) => {
+              if (
+                key === "profile"
+              ) {
+                return (
+                  <span
+                    onClick={() =>
+                      navigate(
+                        "/driver-profile",
+                        {
+                          state: row,
+                        }
+                      )
+                    }
+                    style={{
+                      cursor: "pointer",
+                      color: "#7DD3FC",
+                      textDecoration: "underline",
+                      textUnderlineOffset: "4px",
+                      fontWeight: "500",
+                      fontSize: "20px",
+                    }}
+                  >
+                    View Profile
+                  </span>
+                );
+              }
+
+              return value;
+            }}
+          />
+        </div>
       </div>
     </div>
   );

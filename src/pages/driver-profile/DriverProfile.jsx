@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -198,12 +199,13 @@ function DriverProfile() {
       <div
         style={{
           minHeight: "100vh",
-          backgroundColor: "#14004D",
-          color: "white",
+          backgroundColor: "#0B1220",
+          color: "#F8FAFC",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           fontSize: "24px",
+          fontFamily: "Inter, Arial, sans-serif",
         }}
       >
         Loading driver profile...
@@ -216,8 +218,9 @@ function DriverProfile() {
       <div
         style={{
           minHeight: "100vh",
-          backgroundColor: "#14004D",
-          color: "white",
+          backgroundColor: "#0B1220",
+          color: "#F8FAFC",
+          fontFamily: "Inter, Arial, sans-serif",
         }}
       >
         <PageHeader
@@ -237,6 +240,9 @@ function DriverProfile() {
             paddingTop: "100px",
             fontSize: "24px",
             gap: "30px",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            textAlign: "center",
           }}
         >
           <p>
@@ -263,7 +269,9 @@ function DriverProfile() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#14004D",
+        backgroundColor: "#0B1220",
+        color: "#F8FAFC",
+        fontFamily: "Inter, Arial, sans-serif",
       }}
     >
       <PageHeader
@@ -277,19 +285,20 @@ function DriverProfile() {
       <div
         style={{
           display: "flex",
-          justifyContent:
-            "space-between",
+          justifyContent: "space-between",
           padding: "50px",
           gap: "60px",
+          flexWrap: "wrap",
+          boxSizing: "border-box",
         }}
       >
         {/* Left Section */}
         <div
           style={{
             width: "35%",
+            minWidth: "240px",
             display: "flex",
-            flexDirection:
-              "column",
+            flexDirection: "column",
             alignItems: "center",
             gap: "40px",
           }}
@@ -300,14 +309,15 @@ function DriverProfile() {
               width: "180px",
               height: "180px",
               borderRadius: "50%",
-              border: "12px solid white",
+              border: "4px solid #38BDF8",
+              backgroundColor: "#111B2E",
               display: "flex",
-              alignItems:
-                "center",
-              justifyContent:
-                "center",
-              color: "white",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#F8FAFC",
               fontSize: "90px",
+              boxShadow: "0 0 24px rgba(56, 189, 248, 0.12)",
+              boxSizing: "border-box",
             }}
           >
             👤
@@ -317,20 +327,23 @@ function DriverProfile() {
           <div
             style={{
               width: "220px",
-              backgroundColor:
-                "#8DB7F0",
-              borderRadius: "6px",
+              backgroundColor: "#111B2E",
+              color: "#F8FAFC",
+              border: "1px solid #334863",
+              borderTop: "3px solid #FB7185",
+              borderRadius: "12px",
               overflow: "hidden",
+              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.16)",
             }}
           >
             <div
               style={{
-                borderBottom:
-                  "1px solid #555",
+                borderBottom: "1px solid #334863",
                 padding: "10px",
-                textAlign:
-                  "center",
+                textAlign: "center",
                 fontWeight: "600",
+                color: "#CBD5E1",
+                fontSize: "15px",
               }}
             >
               Latest Fatigue Score
@@ -339,10 +352,10 @@ function DriverProfile() {
             <div
               style={{
                 padding: "30px",
-                textAlign:
-                  "center",
+                textAlign: "center",
                 fontSize: "28px",
                 fontWeight: "700",
+                color: "#FB7185",
               }}
             >
               {formatFatigueScore(
@@ -355,20 +368,23 @@ function DriverProfile() {
           <div
             style={{
               width: "220px",
-              backgroundColor:
-                "#8DB7F0",
-              borderRadius: "6px",
+              backgroundColor: "#111B2E",
+              color: "#F8FAFC",
+              border: "1px solid #334863",
+              borderTop: "3px solid #38BDF8",
+              borderRadius: "12px",
               overflow: "hidden",
+              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.16)",
             }}
           >
             <div
               style={{
-                borderBottom:
-                  "1px solid #555",
+                borderBottom: "1px solid #334863",
                 padding: "10px",
-                textAlign:
-                  "center",
+                textAlign: "center",
                 fontWeight: "600",
+                color: "#CBD5E1",
+                fontSize: "15px",
               }}
             >
               Last Active
@@ -377,9 +393,9 @@ function DriverProfile() {
             <div
               style={{
                 padding: "30px",
-                textAlign:
-                  "center",
+                textAlign: "center",
                 fontWeight: "600",
+                color: "#F8FAFC",
               }}
             >
               {formatDateTime(
@@ -393,9 +409,9 @@ function DriverProfile() {
         <div
           style={{
             flex: 1,
+            minWidth: "280px",
             display: "flex",
-            flexDirection:
-              "column",
+            flexDirection: "column",
             gap: "20px",
           }}
         >
@@ -439,16 +455,23 @@ function DriverProfile() {
             <div
               key={item.label}
               style={{
-                backgroundColor:
-                  "#8DB7F0",
-                padding:
-                  "18px 24px",
-                borderRadius: "18px",
-                fontSize: "22px",
+                background: "linear-gradient(145deg, #111B2E 0%, #152238 100%)",
+                border: "1px solid #26364D",
+                borderRadius: "12px",
+                padding: "18px 24px",
+                fontSize: "18px",
                 fontWeight: "500",
+                color: "#F8FAFC",
+                boxShadow: "0 6px 18px rgba(0, 0, 0, 0.12)",
+                overflowWrap: "anywhere",
               }}
             >
-              <strong>
+              <strong
+                style={{
+                  color: "#7DD3FC",
+                  fontWeight: "600",
+                }}
+              >
                 {item.label} -{" "}
               </strong>
 
@@ -460,10 +483,10 @@ function DriverProfile() {
           <div
             style={{
               display: "flex",
-              justifyContent:
-                "space-between",
+              justifyContent: "space-between",
               gap: "20px",
               marginTop: "60px",
+              flexWrap: "wrap",
             }}
           >
             <PrimaryButton
@@ -500,8 +523,7 @@ function DriverProfile() {
           <div
             style={{
               display: "flex",
-              justifyContent:
-                "center",
+              justifyContent: "center",
               marginTop: "15px",
             }}
           >
