@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -8,6 +9,7 @@ import {
 
 import PageHeader from "../../components/layout/PageHeader";
 import PrimaryButton from "../../components/common/PrimaryButton";
+import VideoPlaceholder from "../../components/common/VideoPlaceholder";
 
 function displayValue(value) {
   return value !== null &&
@@ -230,20 +232,18 @@ function FleetLiveLocation() {
             <div
               style={{
                 flex: 1,
+                minHeight: 0,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: "#111B2E",
               }}
             >
-              <span
-                style={{
-                  color: "#CBD5E1",
-                  fontSize: "22px",
-                }}
-              >
-                Live stream not started
-              </span>
+              <VideoPlaceholder
+                width="100%"
+                height="100%"
+                text="Live stream not started"
+              />
             </div>
           </div>
 
